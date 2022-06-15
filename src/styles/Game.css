@@ -1,0 +1,8 @@
+body {
+    overflow: hidden;
+}
+
+.Game {
+    align-items: center;
+    justify-content: center;
+}
