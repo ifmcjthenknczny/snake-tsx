@@ -1,6 +1,6 @@
 export type Coords = {
-    x: Number;
-    y: Number;
+    x: number;
+    y: number;
 }
 
 export type GridProps = {
@@ -9,9 +9,9 @@ export type GridProps = {
     snakeTail: Coords[];
 }
 
-type CellColor = 'green' | 'red' | 'blue' | 'white' | 'black'
+export type CellColor = 'green' | 'red' | 'blue' | 'darkgray'
 
 export type CellProps = {
     color: CellColor
 }
-export type Key = 'left' | 'right' | 'up' | 'down' | null;
+export type Key = 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' | 'ArrowDown';

@@ -1,15 +1,35 @@
-import { BOARD_SIZE } from "../CONSTANTS";
+import { useEffect, useState } from "react";
+import { BOARD_SIZE, ELEMENTS_COLORS } from "../CONSTANTS";
 import '../styles/Grid.css';
-import { GridProps } from "../TYPES";
+import { CellColor, GridProps } from "../TYPES";
 import Cell from "./Cell";
-// import { BOARD_SIZE } from '../CONSTANTS'
 
-export default function Grid({ }: GridProps) {
+export default function Grid(props: GridProps) {
+    const {applePosition, snakeHead, snakeTail} = props;
+
     const cellsQuantity = BOARD_SIZE.x * BOARD_SIZE.y;
+    const [grid, setGrid] = useState<CellColor[]>(new Array<CellColor>(cellsQuantity).fill('darkgray'))
+
+    useEffect(() => {
+        setCellColors()
+
+        return () => {
+        }
+    }, [props])
+
+    const setCellColors = () => {
+        const newGridState = new Array<CellColor>(cellsQuantity).fill(ELEMENTS_COLORS.empty);
+        newGridState[BOARD_SIZE.y * applePosition.y + applePosition.x] = ELEMENTS_COLORS.apple;
+        newGridState[BOARD_SIZE.y * snakeHead.y + snakeHead.x] = ELEMENTS_COLORS.head;
+
+        snakeTail.forEach(e => newGridState[BOARD_SIZE.y * e.y + e.x] = ELEMENTS_COLORS.tail);
+
+        setGrid(newGridState)
+    }
 
     return (
         <div className="Grid">
-            {Array.apply(null, Array(5)).map(e => <Cell color="red" />)}
+            {grid.map(e => <Cell color={e} />)}
         </div>
     )
 }
