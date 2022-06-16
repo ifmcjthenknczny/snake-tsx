@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { APPLES_TO_SPEED_UP, BOARD_SIZE, FORBIDDEN_DIRECTIONS, SNAKE_SPEED_MULTIPLIER, STARTING_MOVE_REFRESH, STARTING_DIRECTION } from '../CONSTANTS';
-import { randomizeCoords } from '../helpers';
+import { APPLES_TO_SPEED_UP, BOARD_SIZE, FORBIDDEN_DIRECTIONS, SNAKE_SPEED_MULTIPLIER, STARTING_DIRECTION, STARTING_MOVE_REFRESH } from '../CONSTANTS';
+import { randomizeCoordsOnEmptySquares } from '../helpers';
+import '../styles/Game.css';
 import { Coords } from '../TYPES';
 import GameOver from './GameOver';
 import Grid from './Grid';
@@ -12,16 +13,18 @@ export default function Game() {
     // const snakeTailPosition = useRef<Coords[]>([])
 
     const [snakeSpeed, setSnakeSpeed] = useState(STARTING_MOVE_REFRESH);
-    const [applePosition, setApplePosition] = useState(randomizeCoords(BOARD_SIZE.x, BOARD_SIZE.y));
     const [applesEaten, setApplesEaten] = useState(0);
+
     const [snakeHeadPosition, setSnakeHeadPosition] = useState<Coords>({ x: Math.floor(BOARD_SIZE.x / 2), y: Math.floor(BOARD_SIZE.y / 2) })
+    const [applePosition, setApplePosition] = useState(randomizeCoordsOnEmptySquares(BOARD_SIZE.x, BOARD_SIZE.y, [snakeHeadPosition]));
     const [snakeTailPosition, setSnakeTailPosition] = useState<Coords[]>([])
-    
+    // const [minePosition, setMinePosition] = useState<Coords[]>(randomizeCoordsOnEmptySquares(BOARD_SIZE.x, BOARD_SIZE.y, [applePosition, snakeHeadPosition]))
+
     const keyRef = useRef(STARTING_DIRECTION)
     const forbiddenDirection = useRef<string | null>(null)
     const lastHeadPosition = useRef<Coords>(snakeHeadPosition)
     const isGameOver = useRef(false)
-    let keyFired = false
+    const keyFired = useRef(false)
 
     useEffect(() => {
         const moveInterval = setInterval(gameIteration, snakeSpeed)
@@ -46,7 +49,6 @@ export default function Game() {
     const setLastKey = (key: string) => {
         console.log(`curr: ${key}, forb: ${forbiddenDirection.current}`)
         if (key === forbiddenDirection.current || key === keyRef.current) return
-        forbiddenDirection.current = FORBIDDEN_DIRECTIONS[key]
         keyRef.current = key
     }
 
@@ -55,6 +57,7 @@ export default function Game() {
     }
 
     const snakeMove = () => {
+        if (applesEaten > 0) forbiddenDirection.current = FORBIDDEN_DIRECTIONS[keyRef.current]
         setLastHeadPosition()
         switch (keyRef.current) {
             case "ArrowUp": {
@@ -97,21 +100,13 @@ export default function Game() {
     }
 
     const isEatingApple = () => {
-        if (snakeHeadPosition.x === applePosition.x && snakeHeadPosition.y === applePosition.y) return true
+        if (JSON.stringify(snakeHeadPosition) === JSON.stringify(applePosition)) return true
         return false
-    }
-
-    const randomizeAppleCoords = () => {
-        let appleCoords: Coords;
-        do {
-            appleCoords = randomizeCoords(BOARD_SIZE.x, BOARD_SIZE.y)
-        } while (snakeTailPosition.includes(appleCoords))
-        return appleCoords
     }
 
     const eatApple = () => {
         // setInterval(() => setApplePosition(randomizeAppleCoords), APPLE_CHANGES_POSITION_TIME)
-        setApplePosition(randomizeAppleCoords)
+        setApplePosition(randomizeCoordsOnEmptySquares(BOARD_SIZE.x, BOARD_SIZE.y, [snakeHeadPosition, ...snakeTailPosition]))
         setApplesEaten(prev => {
             if ((prev + 1) % APPLES_TO_SPEED_UP === 0) speedUpTheSnake()
             return prev + 1
@@ -123,13 +118,13 @@ export default function Game() {
     }
 
     const handleKeydown = (e: KeyboardEvent) => {
-        if (keyFired) return
-        keyFired = true
+        if (keyFired.current) return
+        keyFired.current = true
         setLastKey(e.key)
     }
 
     const handleKeyup = (e: KeyboardEvent) => {
-        keyFired = false
+        keyFired.current = false
     }
 
     const checkGameOver = () => {

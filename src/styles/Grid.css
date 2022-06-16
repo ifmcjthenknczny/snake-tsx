@@ -7,4 +7,6 @@
     grid-column-gap: 0.4vmin;
     grid-row-gap: 0.4vmin;
     border: 2px black solid;
+    justify-self: center;
+    align-self: center;
 }
