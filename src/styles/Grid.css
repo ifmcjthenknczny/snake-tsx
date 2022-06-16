@@ -1,10 +1,10 @@
 .Grid {
-    width: calc(3.5vmin * 2 + 0.4vmin * 19);
-    height: calc(3.5vmin * 2 + 0.4vmin * 19);
+    width: calc(3.5vmin * 20 + 0.4vmin * 19);
+    height: calc(3.5vmin * 20 + 0.4vmin * 19);
     display: grid;
     grid-template-columns: repeat(20, 3.5vmin);
     grid-template-rows: repeat(20, 3.5vmin);
     grid-column-gap: 0.4vmin;
     grid-row-gap: 0.4vmin;
-    border: 2px black dotted;
+    border: 2px black solid;
 }

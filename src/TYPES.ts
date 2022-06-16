@@ -9,7 +9,7 @@ export type GridProps = {
     snakeTail: Coords[];
 }
 
-export type CellColor = 'green' | 'red' | 'blue' | 'darkgray'
+export type CellColor = 'green' | 'red' | 'blue' | 'darkgray' | 'black'
 
 export type CellProps = {
     color: CellColor

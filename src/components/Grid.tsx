@@ -12,16 +12,12 @@ export default function Grid(props: GridProps) {
 
     useEffect(() => {
         setCellColors()
-
-        return () => {
-        }
     }, [props])
 
     const setCellColors = () => {
         const newGridState = new Array<CellColor>(cellsQuantity).fill(ELEMENTS_COLORS.empty);
         newGridState[BOARD_SIZE.y * applePosition.y + applePosition.x] = ELEMENTS_COLORS.apple;
         newGridState[BOARD_SIZE.y * snakeHead.y + snakeHead.x] = ELEMENTS_COLORS.head;
-
         snakeTail.forEach(e => newGridState[BOARD_SIZE.y * e.y + e.x] = ELEMENTS_COLORS.tail);
 
         setGrid(newGridState)
