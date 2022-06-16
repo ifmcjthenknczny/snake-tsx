@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import { useEffect, useState } from "react";
 import { BOARD_SIZE, ELEMENTS_COLORS } from "../CONSTANTS";
 import '../styles/Grid.css';
@@ -5,7 +6,7 @@ import { CellColor, GridProps } from "../TYPES";
 import Cell from "./Cell";
 
 export default function Grid(props: GridProps) {
-    const {applePosition, snakeHead, snakeTail} = props;
+    const { applePosition, snakeHead, snakeTail } = props;
 
     const cellsQuantity = BOARD_SIZE.x * BOARD_SIZE.y;
     const [grid, setGrid] = useState<CellColor[]>(new Array<CellColor>(cellsQuantity).fill('darkgray'))
@@ -25,7 +26,7 @@ export default function Grid(props: GridProps) {
 
     return (
         <div className="Grid">
-            {grid.map(e => <Cell color={e} />)}
+            {grid.map(e => <Cell key={nanoid()} color={e} />)}
         </div>
     )
 }

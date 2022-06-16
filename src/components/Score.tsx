@@ -1,3 +1,4 @@
+import '../styles/Score.css'
 
 type Props = {
     score: number
@@ -5,6 +6,6 @@ type Props = {
 
 export default function Score(props: Props) {
     return (
-        <div>Your score: {props.score}</div>
+        <div className="Score">Your score: {props.score}</div>
     )
 }

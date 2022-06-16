@@ -14,4 +14,5 @@ export type CellColor = 'green' | 'red' | 'blue' | 'darkgray' | 'black'
 export type CellProps = {
     color: CellColor
 }
+
 export type Key = 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' | 'ArrowDown';

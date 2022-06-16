@@ -32,3 +32,7 @@ export const FORBIDDEN_DIRECTIONS = {
     "ArrowUp": "ArrowDown",
     "ArrowDown": "ArrowUp"
 }
+
+export const APPLE_CHANGES_POSITION_TIME = 10000
+
+export const STARTING_DIRECTION = "ArrowLeft"

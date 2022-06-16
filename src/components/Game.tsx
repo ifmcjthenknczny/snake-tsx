@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { APPLES_TO_SPEED_UP, BOARD_SIZE, SNAKE_SPEED_MULTIPLIER, STARTING_MOVE_REFRESH } from '../CONSTANTS';
+import { APPLES_TO_SPEED_UP, BOARD_SIZE, FORBIDDEN_DIRECTIONS, SNAKE_SPEED_MULTIPLIER, STARTING_MOVE_REFRESH, STARTING_DIRECTION } from '../CONSTANTS';
 import { randomizeCoords } from '../helpers';
 import { Coords } from '../TYPES';
 import GameOver from './GameOver';
@@ -13,16 +13,15 @@ export default function Game() {
 
     const [snakeSpeed, setSnakeSpeed] = useState(STARTING_MOVE_REFRESH);
     const [applePosition, setApplePosition] = useState(randomizeCoords(BOARD_SIZE.x, BOARD_SIZE.y));
-    const [isGameOver, setIsGameOver] = useState(false)
-    // const [lastKey, setLastKey] = useState("ArrowLeft");
     const [applesEaten, setApplesEaten] = useState(0);
     const [snakeHeadPosition, setSnakeHeadPosition] = useState<Coords>({ x: Math.floor(BOARD_SIZE.x / 2), y: Math.floor(BOARD_SIZE.y / 2) })
     const [snakeTailPosition, setSnakeTailPosition] = useState<Coords[]>([])
-
-    const keyRef = useRef("ArrowLeft")
-    const prevKeyRef = useRef("ArrowRight")
+    
+    const keyRef = useRef(STARTING_DIRECTION)
+    const forbiddenDirection = useRef<string | null>(null)
     const lastHeadPosition = useRef<Coords>(snakeHeadPosition)
-    const forbiddenDirection = useState
+    const isGameOver = useRef(false)
+    let keyFired = false
 
     useEffect(() => {
         const moveInterval = setInterval(gameIteration, snakeSpeed)
@@ -40,19 +39,15 @@ export default function Game() {
 
     const gameIteration = () => {
         snakeMove()
-        if (checkGameOver()) setIsGameOver(true)
+        if (checkGameOver()) isGameOver.current = true
         if (isEatingApple()) eatApple()
     }
 
     const setLastKey = (key: string) => {
-        if (prevKeyRef.current === "ArrowDown" && key === "ArrowUp") return
-        else if (prevKeyRef.current === "ArrowUp" && key === "ArrowDown") return
-        else if (prevKeyRef.current === "ArrowLeft" && key === "ArrowRight") return
-        else if (prevKeyRef.current === "ArrowRight" && key === "ArrowLeft") return
-        else {
-            prevKeyRef.current = keyRef.current
-            keyRef.current = key
-        }
+        console.log(`curr: ${key}, forb: ${forbiddenDirection.current}`)
+        if (key === forbiddenDirection.current || key === keyRef.current) return
+        forbiddenDirection.current = FORBIDDEN_DIRECTIONS[key]
+        keyRef.current = key
     }
 
     const setLastHeadPosition = () => {
@@ -106,19 +101,21 @@ export default function Game() {
         return false
     }
 
-    const eatApple = () => {
+    const randomizeAppleCoords = () => {
         let appleCoords: Coords;
         do {
             appleCoords = randomizeCoords(BOARD_SIZE.x, BOARD_SIZE.y)
         } while (snakeTailPosition.includes(appleCoords))
+        return appleCoords
+    }
 
-        setApplePosition(appleCoords)
+    const eatApple = () => {
+        // setInterval(() => setApplePosition(randomizeAppleCoords), APPLE_CHANGES_POSITION_TIME)
+        setApplePosition(randomizeAppleCoords)
         setApplesEaten(prev => {
             if ((prev + 1) % APPLES_TO_SPEED_UP === 0) speedUpTheSnake()
             return prev + 1
         })
-        // setSnakeTailPosition(prev => [snakeHeadPosition, ...prev])
-        // setSnakeTailPosition(prev => [...prev, lastTailPosition.current])
     }
 
     const speedUpTheSnake = () => {
@@ -126,7 +123,13 @@ export default function Game() {
     }
 
     const handleKeydown = (e: KeyboardEvent) => {
+        if (keyFired) return
+        keyFired = true
         setLastKey(e.key)
+    }
+
+    const handleKeyup = (e: KeyboardEvent) => {
+        keyFired = false
     }
 
     const checkGameOver = () => {
@@ -140,13 +143,14 @@ export default function Game() {
         return false
     }
 
-    document.addEventListener('keydown', handleKeydown) //useRef?
+    document.addEventListener('keydown', handleKeydown)
+    document.addEventListener('keyup', handleKeyup)
 
     return (
         <div className="Game">
-            {isGameOver ? <GameOver /> : ""}
+            {isGameOver.current ? <GameOver /> : ""}
             <Score score={applesEaten} />
-            {!isGameOver ? <Grid applePosition={applePosition} snakeHead={snakeHeadPosition} snakeTail={snakeTailPosition} /> : ""}
+            {!isGameOver.current ? <Grid applePosition={applePosition} snakeHead={snakeHeadPosition} snakeTail={snakeTailPosition} /> : ""}
         </div>
     )
 }
