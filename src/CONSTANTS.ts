@@ -38,3 +38,5 @@ export const APPLE_CHANGES_POSITION_TIME = 10000
 export const NEW_MINE_INTERVAL = 30000
 
 export const STARTING_DIRECTION = "ArrowLeft"
+
+export const LOCAL_STORAGE_HIGH_SCORE_NAME = "HighScore"

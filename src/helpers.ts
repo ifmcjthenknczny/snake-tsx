@@ -23,3 +23,14 @@ export const randomizeCoordsOnEmptySquares = (xMax: number, yMax: number, occupi
         if (occupiedCoords === null || checkIfCoordsEmpty(randomCoords, occupiedCoords) === true) return randomCoords
     }
 }
+
+export function clearAllIntervals() {
+	const INTERVAL_ID = setInterval(function(){}, Number.MAX_SAFE_INTEGER);
+	for (let i = 1; i < +INTERVAL_ID; i++) {
+	  clearInterval(i);
+	}
+}
+
+export function isObjectsEqual(obj1: {}, obj2: {}) {
+	return JSON.stringify(obj1) === JSON.stringify(obj2)
+}

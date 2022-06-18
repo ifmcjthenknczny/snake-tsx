@@ -1,6 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-.GameOver h1 {
+.GameOver {
     font-family: 'Press Start 2P', cursive;
     text-align: center;
+}
+
+.GameOver__again {
+    top: 3em;
+}
+
+.GameOver__again:hover {
+    color: red;
+    cursor: pointer;
+    transition: color .5s;
 }

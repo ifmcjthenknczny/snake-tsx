@@ -1,29 +1,29 @@
 import { useEffect, useRef, useState } from 'react';
 import { APPLES_TO_SPEED_UP, BOARD_SIZE, FORBIDDEN_DIRECTIONS, SNAKE_SPEED_MULTIPLIER, STARTING_DIRECTION, STARTING_MOVE_REFRESH } from '../CONSTANTS';
-import { randomizeCoordsOnEmptySquares } from '../helpers';
+import { randomizeCoordsOnEmptySquares, isObjectsEqual } from '../helpers';
 import '../styles/Game.css';
 import { Coords } from '../TYPES';
-import GameOver from './GameOver';
 import Grid from './Grid';
 import Score from './Score';
 
-export default function Game() {
+type GameProps = {
+    onGameOver: (score: number) => void;
+}
 
-    // const snakeHeadPosition = useRef<Coords>({ x: Math.floor(BOARD_SIZE.x / 2), y: Math.floor(BOARD_SIZE.y / 2) })
-    // const snakeTailPosition = useRef<Coords[]>([])
+export default function Game(props: GameProps) {
 
     const [snakeSpeed, setSnakeSpeed] = useState(STARTING_MOVE_REFRESH);
     const [applesEaten, setApplesEaten] = useState(0);
 
     const [snakeHeadPosition, setSnakeHeadPosition] = useState<Coords>({ x: Math.floor(BOARD_SIZE.x / 2), y: Math.floor(BOARD_SIZE.y / 2) })
-    const [applePosition, setApplePosition] = useState(randomizeCoordsOnEmptySquares(BOARD_SIZE.x, BOARD_SIZE.y, [snakeHeadPosition]));
     const [snakeTailPosition, setSnakeTailPosition] = useState<Coords[]>([])
+
+    const [applePosition, setApplePosition] = useState(randomizeCoordsOnEmptySquares(BOARD_SIZE.x, BOARD_SIZE.y, [snakeHeadPosition]));
     // const [minePosition, setMinePosition] = useState<Coords[]>(randomizeCoordsOnEmptySquares(BOARD_SIZE.x, BOARD_SIZE.y, [applePosition, snakeHeadPosition]))
 
     const keyRef = useRef(STARTING_DIRECTION)
     const forbiddenDirection = useRef<string | null>(null)
     const lastHeadPosition = useRef<Coords>(snakeHeadPosition)
-    const isGameOver = useRef(false)
     const keyFired = useRef(false)
 
     useEffect(() => {
@@ -33,16 +33,9 @@ export default function Game() {
         }
     })
 
-    // const clearAllIntervals = () => {
-    //     const interval_id = window.setInterval(function () { }, Number.MAX_SAFE_INTEGER);
-    //     for (let i = 1; i < interval_id; i++) {
-    //         window.clearInterval(i);
-    //     }
-    // }
-
     const gameIteration = () => {
         snakeMove()
-        if (checkGameOver()) isGameOver.current = true
+        if (checkGameOver()) props.onGameOver(applesEaten)
         if (isEatingApple()) eatApple()
     }
 
@@ -100,7 +93,7 @@ export default function Game() {
     }
 
     const isEatingApple = () => {
-        if (JSON.stringify(snakeHeadPosition) === JSON.stringify(applePosition)) return true
+        if (isObjectsEqual(snakeHeadPosition, applePosition)) return true
         return false
     }
 
@@ -120,6 +113,7 @@ export default function Game() {
     const handleKeydown = (e: KeyboardEvent) => {
         if (keyFired.current) return
         keyFired.current = true
+        // if (e.key !== keyRef.current) snakeMove()
         setLastKey(e.key)
     }
 
@@ -130,9 +124,8 @@ export default function Game() {
     const checkGameOver = () => {
         if (snakeHeadPosition.x >= BOARD_SIZE.x || snakeHeadPosition.x < 0 || snakeHeadPosition.y < 0 || snakeHeadPosition.y >= BOARD_SIZE.y) return true
         else {
-            const headJSON = JSON.stringify(snakeHeadPosition)
             for (let tail of snakeTailPosition) {
-                if (JSON.stringify(tail) === headJSON) return true
+                if (isObjectsEqual(tail, snakeHeadPosition)) return true
             }
         }
         return false
@@ -143,9 +136,8 @@ export default function Game() {
 
     return (
         <div className="Game">
-            {isGameOver.current ? <GameOver /> : ""}
             <Score score={applesEaten} />
-            {!isGameOver.current ? <Grid applePosition={applePosition} snakeHead={snakeHeadPosition} snakeTail={snakeTailPosition} /> : ""}
+            <Grid applePosition={applePosition} snakeHead={snakeHeadPosition} snakeTail={snakeTailPosition} />
         </div>
     )
 }
