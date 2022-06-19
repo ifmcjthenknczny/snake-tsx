@@ -3,12 +3,6 @@ export type Coords = {
     y: number;
 }
 
-export type GridProps = {
-    applePosition: Coords;
-    snakeHead: Coords;
-    snakeTail: Coords[];
-}
-
 export type CellColor = 'green' | 'red' | 'blue' | 'darkgray' | 'black'
 
 export type CellProps = {

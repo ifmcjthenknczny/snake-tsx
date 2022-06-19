@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { LOCAL_STORAGE_HIGH_SCORE_NAME } from "../CONSTANTS"
 import Game from "./Game"
 import GameOver from "./GameOver"
+import '../styles/App.css'
 
 export default function App() {
     const [isGameOver, setGameOver] = useState(false)
@@ -10,8 +11,7 @@ export default function App() {
 
     useEffect(() => {
         const highScoreLocalStorage = localStorage.getItem(LOCAL_STORAGE_HIGH_SCORE_NAME)
-        console.log(localStorage.getItem(highScoreLocalStorage))
-        if (highScoreLocalStorage) highScore.current = highScoreLocalStorage
+        if (highScoreLocalStorage !== null) highScore.current = highScoreLocalStorage
     }, [])
 
     const handleAgain = () => {

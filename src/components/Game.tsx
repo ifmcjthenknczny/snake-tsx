@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { APPLES_TO_SPEED_UP, BOARD_SIZE, FORBIDDEN_DIRECTIONS, SNAKE_SPEED_MULTIPLIER, STARTING_DIRECTION, STARTING_MOVE_REFRESH } from '../CONSTANTS';
-import { randomizeCoordsOnEmptySquares, isObjectsEqual } from '../helpers';
+import { APPLES_TO_SPEED_UP, BOARD_SIZE, FORBIDDEN_DIRECTIONS, NEW_MINE_INTERVAL, SNAKE_SPEED_MULTIPLIER, STARTING_DIRECTION, STARTING_MOVE_REFRESH } from '../CONSTANTS';
+import { isObjectsEqual, randomizeCoordsOnEmptySquares } from '../helpers';
 import '../styles/Game.css';
 import { Coords } from '../TYPES';
 import Grid from './Grid';
@@ -16,15 +16,17 @@ export default function Game(props: GameProps) {
     const [applesEaten, setApplesEaten] = useState(0);
 
     const [snakeHeadPosition, setSnakeHeadPosition] = useState<Coords>({ x: Math.floor(BOARD_SIZE.x / 2), y: Math.floor(BOARD_SIZE.y / 2) })
-    const [snakeTailPosition, setSnakeTailPosition] = useState<Coords[]>([])
+    const [snakeTailPositions, setSnakeTailPositions] = useState<Coords[]>([])
 
     const [applePosition, setApplePosition] = useState(randomizeCoordsOnEmptySquares(BOARD_SIZE.x, BOARD_SIZE.y, [snakeHeadPosition]));
-    // const [minePosition, setMinePosition] = useState<Coords[]>(randomizeCoordsOnEmptySquares(BOARD_SIZE.x, BOARD_SIZE.y, [applePosition, snakeHeadPosition]))
+    const [minePositions, setMinePositions] = useState<Coords[]>([])
 
     const keyRef = useRef(STARTING_DIRECTION)
-    const forbiddenDirection = useRef<string | null>(null)
-    const lastHeadPosition = useRef<Coords>(snakeHeadPosition)
+    const forbiddenDirectionRef = useRef<string | null>(null)
+    const lastHeadPositionRef = useRef<Coords>(snakeHeadPosition)
     const keyFired = useRef(false)
+
+    // const lastTime = useRef(Date.now())
 
     useEffect(() => {
         const moveInterval = setInterval(gameIteration, snakeSpeed)
@@ -33,6 +35,13 @@ export default function Game(props: GameProps) {
         }
     })
 
+    useEffect(() => {
+        const mineInterval = setInterval(placeNewMine, NEW_MINE_INTERVAL)
+        return () => {
+            clearInterval(mineInterval)
+        }
+    }, [])
+
     const gameIteration = () => {
         snakeMove()
         if (checkGameOver()) props.onGameOver(applesEaten)
@@ -40,18 +49,31 @@ export default function Game(props: GameProps) {
     }
 
     const setLastKey = (key: string) => {
-        console.log(`curr: ${key}, forb: ${forbiddenDirection.current}`)
-        if (key === forbiddenDirection.current || key === keyRef.current) return
+        // console.log(`curr: ${key}, forb: ${forbiddenDirection.current}`)
+        if (key === forbiddenDirectionRef.current || key === keyRef.current) return
         keyRef.current = key
     }
 
     const setLastHeadPosition = () => {
-        lastHeadPosition.current = snakeHeadPosition
+        lastHeadPositionRef.current = snakeHeadPosition
+    }
+
+    const placeNewMine = () => {
+        // console.log(Date.now() - lastTime.current)
+        // lastTime.current = Date.now()
+        console.log("FIRED!!!")
+        const newMineCoords = randomizeCoordsOnEmptySquares(BOARD_SIZE.x, BOARD_SIZE.y, [applePosition, snakeHeadPosition, ...snakeTailPositions])
+        setMinePositions(prev => [...prev, newMineCoords])
     }
 
     const snakeMove = () => {
-        if (applesEaten > 0) forbiddenDirection.current = FORBIDDEN_DIRECTIONS[keyRef.current]
+        if (applesEaten > 0) forbiddenDirectionRef.current = FORBIDDEN_DIRECTIONS[keyRef.current]
         setLastHeadPosition()
+        moveSnakeHead()
+        moveSnakeTail()
+    }
+
+    const moveSnakeHead = () => {
         switch (keyRef.current) {
             case "ArrowUp": {
                 setSnakeHeadPosition(prev => ({
@@ -78,16 +100,22 @@ export default function Game(props: GameProps) {
                 break;
             }
         }
-        if (!isEatingApple()) {
-            setSnakeTailPosition(prev => {
-                prev.pop()
-                if (applesEaten > 0) prev.unshift(lastHeadPosition.current)
-                return prev
+    }
+
+    const moveSnakeTail = () => {
+        if (isEatingApple()) {
+            setSnakeTailPositions(prev => {
+                return [lastHeadPositionRef.current, ...prev]
             })
         } else {
-            setSnakeTailPosition(prev => {
-                prev.unshift(lastHeadPosition.current)
-                return prev
+            setSnakeTailPositions(prev => {
+                let prevPosition = prev;
+                if (applesEaten > 1) {
+                    prevPosition = prevPosition.slice(0, -1)
+                    prevPosition = [lastHeadPositionRef.current, ...prevPosition]
+                }
+                else if (applesEaten === 1) prevPosition = [lastHeadPositionRef.current]
+                return prevPosition
             })
         }
     }
@@ -99,12 +127,21 @@ export default function Game(props: GameProps) {
 
     const eatApple = () => {
         // setInterval(() => setApplePosition(randomizeAppleCoords), APPLE_CHANGES_POSITION_TIME)
-        setApplePosition(randomizeCoordsOnEmptySquares(BOARD_SIZE.x, BOARD_SIZE.y, [snakeHeadPosition, ...snakeTailPosition]))
+        placeNewApple()
         setApplesEaten(prev => {
             if ((prev + 1) % APPLES_TO_SPEED_UP === 0) speedUpTheSnake()
             return prev + 1
         })
     }
+
+    const placeNewApple = () => {
+
+        setApplePosition(randomizeCoordsOnEmptySquares(BOARD_SIZE.x, BOARD_SIZE.y, [snakeHeadPosition, ...snakeTailPositions, ...minePositions]))
+        // clearTimeout(appleIntervalRef.current)
+        // appleIntervalRef.current = setTimeout(placeApple, APPLE_CHANGE_POSITION_INTERVAL)
+    }
+
+    // const appleIntervalRef = useRef(setTimeout(placeNewApple, APPLE_CHANGE_POSITION_INTERVAL))
 
     const speedUpTheSnake = () => {
         setSnakeSpeed(prev => prev / SNAKE_SPEED_MULTIPLIER)
@@ -122,10 +159,22 @@ export default function Game(props: GameProps) {
     }
 
     const checkGameOver = () => {
-        if (snakeHeadPosition.x >= BOARD_SIZE.x || snakeHeadPosition.x < 0 || snakeHeadPosition.y < 0 || snakeHeadPosition.y >= BOARD_SIZE.y) return true
+        if (snakeHeadPosition.x >= BOARD_SIZE.x || snakeHeadPosition.x < 0 || snakeHeadPosition.y < 0 || snakeHeadPosition.y >= BOARD_SIZE.y) {
+            console.log("Crashed into a wall")
+            return true
+        }
         else {
-            for (let tail of snakeTailPosition) {
-                if (isObjectsEqual(tail, snakeHeadPosition)) return true
+            for (let tail of snakeTailPositions) {
+                if (isObjectsEqual(tail, snakeHeadPosition)) {
+                    console.log("Bit your own tail")
+                    return true
+                }
+            }
+            for (let mine of minePositions) {
+                if (isObjectsEqual(mine, snakeHeadPosition)) {
+                    console.log("Stepped on a mine")
+                    return true
+                }
             }
         }
         return false
@@ -137,7 +186,7 @@ export default function Game(props: GameProps) {
     return (
         <div className="Game">
             <Score score={applesEaten} />
-            <Grid applePosition={applePosition} snakeHead={snakeHeadPosition} snakeTail={snakeTailPosition} />
+            <Grid apple={applePosition} snakeHead={snakeHeadPosition} snakeTail={snakeTailPositions} mines={minePositions} />
         </div>
     )
 }

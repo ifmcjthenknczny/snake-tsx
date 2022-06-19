@@ -33,7 +33,7 @@ export const FORBIDDEN_DIRECTIONS = {
     "ArrowDown": "ArrowUp"
 }
 
-export const APPLE_CHANGES_POSITION_TIME = 10000
+export const APPLE_CHANGE_POSITION_INTERVAL = 10000
 
 export const NEW_MINE_INTERVAL = 30000
 
