@@ -1,8 +1,11 @@
-import { CellProps } from '../TYPES'
+import { CellColor } from '../types'
 
-export default function Cell(props: CellProps) {
-    const {color} = props;
-    return (
-        <div className="Cell" style={{ backgroundColor: color }}></div>
-    )
+export type Props = {
+    color: CellColor
 }
+
+const Cell = ({ color }: Props) => (
+    <div className="Cell" style={{ backgroundColor: color }}></div>
+)
+
+export default Cell

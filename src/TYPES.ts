@@ -5,8 +5,10 @@ export type Coords = {
 
 export type CellColor = 'green' | 'red' | 'blue' | 'darkgray' | 'black'
 
-export type CellProps = {
-    color: CellColor
-}
-
 export type Key = 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' | 'ArrowDown';
+
+type Element = 'apple' | 'empty' | 'head' | 'tail' | 'mine'
+
+export type ElementColors = Record<Element, CellColor>
+
+export type Ms = number

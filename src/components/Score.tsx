@@ -1,11 +1,11 @@
 import '../styles/Score.css'
 
-type ScoreProps = {
+type Props = {
     score: number
 }
 
-export default function Score(props: ScoreProps) {
-    return (
-        <div className="Score">Your score: {props.score}</div>
-    )
-}
+const Score = ({ score }: Props) => (
+    <div className="Score">Your score: {score}</div>
+)
+
+export default Score
