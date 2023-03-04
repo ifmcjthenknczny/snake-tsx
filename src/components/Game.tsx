@@ -14,15 +14,15 @@ const Game = ({ onGameOver }: Props) => {
     const [moveRefresh, setMovesRefresh] = useState(STARTING_MOVE_REFRESH);
     const [applesEaten, setApplesEaten] = useState(0);
 
-    const [snakeHeadPosition, setSnakeHeadPosition] = useState<Coords>(STARTING_HEAD_POSITION)
-    const [snakeTailPositions, setSnakeTailPositions] = useState<Coords[]>(generateStartingSnakeTail(STARTING_LENGTH, STARTING_HEAD_POSITION, STARTING_DIRECTION))
+    const [headCoords, setHeadCoords] = useState<Coords>(STARTING_HEAD_POSITION)
+    const [tailCoords, setTailCoords] = useState<Coords[]>(generateStartingSnakeTail(STARTING_LENGTH, STARTING_HEAD_POSITION, STARTING_DIRECTION))
 
-    const [applePosition, setApplePosition] = useState(randomAvailableCoords([snakeHeadPosition, ...snakeTailPositions]));
-    const [minePositions, setMinePositions] = useState<Coords[]>(STARTING_MINE ? [randomAvailableCoords([snakeHeadPosition, ...snakeTailPositions, applePosition])] : [])
+    const [appleCoords, setAppleCoords] = useState(randomAvailableCoords([headCoords, ...tailCoords]));
+    const [mineCoords, setMineCoords] = useState<Coords[]>(STARTING_MINE ? [randomAvailableCoords([headCoords, ...tailCoords, appleCoords])] : [])
 
     const keyRef = useRef(STARTING_DIRECTION)
     const forbiddenDirectionRef = useRef<string | null>(null)
-    const lastHeadPositionRef = useRef<Coords>(snakeHeadPosition)
+    const lastHeadPositionRef = useRef<Coords>(headCoords)
     const keyFired = useRef(false)
 
     const gameIteration = () => {
@@ -36,7 +36,7 @@ const Game = ({ onGameOver }: Props) => {
         return () => {
             clearTimeout(moveTimeout)
         }
-    }, [moveRefresh, snakeHeadPosition])  //eslint-disable-line react-hooks/exhaustive-deps
+    }, [moveRefresh, headCoords])  //eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         const mineInterval = setInterval(placeNewMine, NEW_MINE_INTERVAL)
@@ -51,12 +51,12 @@ const Game = ({ onGameOver }: Props) => {
     }
 
     const setLastHeadPosition = () => {
-        lastHeadPositionRef.current = snakeHeadPosition
+        lastHeadPositionRef.current = headCoords
     }
 
     const placeNewMine = () => {
-        const newMineCoords = randomAvailableCoords([applePosition, snakeHeadPosition, ...snakeTailPositions])
-        setMinePositions(prev => [...prev, newMineCoords])
+        const newMineCoords = randomAvailableCoords([appleCoords, headCoords, ...tailCoords])
+        setMineCoords(prev => [...prev, newMineCoords])
     }
 
     const snakeMoveIteration = () => {
@@ -65,51 +65,40 @@ const Game = ({ onGameOver }: Props) => {
         forbiddenDirectionRef.current = FORBIDDEN_DIRECTIONS[keyRef.current]
     }
 
-    const moveBody = () => {
-        switch (keyRef.current) {
-            case "ArrowUp": {
-                setSnakeHeadPosition(prev => ({
-                    ...prev, y: (prev.y - 1)
-                }))
-                break;
-            }
-            case "ArrowDown": {
-                setSnakeHeadPosition(prev => ({
-                    ...prev, y: (prev.y + 1)
-                }))
-                break;
-            }
-            case "ArrowLeft": {
-                setSnakeHeadPosition(prev => ({
-                    ...prev, x: (prev.x - 1)
-                }))
-                break;
-            }
-            case "ArrowRight": {
-                setSnakeHeadPosition(prev => ({
-                    ...prev, x: (prev.x + 1)
-                }))
-                break;
-            }
-        }
-        setSnakeTailPositions(prev => [lastHeadPositionRef.current, ...(isEatingApple() ? prev : prev.slice(0, -1))])
+    const moveHead = () => {
+        const moveHeadDifference = (prev: Coords) => ({
+            ArrowUp: { y: (prev.y - 1) },
+            ArrowDown: { y: (prev.y + 1) },
+            ArrowLeft: { x: (prev.x - 1) },
+            ArrowRight: { x: (prev.x + 1) }
+        })
+        setHeadCoords(prev => ({...prev, ...moveHeadDifference(prev)[keyRef.current]}))
     }
 
-    const isEatingApple = () => isObjectsEqual(snakeHeadPosition, applePosition)
+    const moveTail = () => {
+        setTailCoords(prev => [lastHeadPositionRef.current, ...(isEatingApple() ? prev : prev.slice(0, -1))])
+    }
+
+    const moveBody = () => {
+        moveHead()
+        moveTail()
+    }
+
+    const isEatingApple = () => isObjectsEqual(headCoords, appleCoords)
 
     const eatApple = () => {
         placeNewApple()
         setApplesEaten(prev => {
-            if (!((prev + 1) % APPLES_TO_SPEED_UP)) speedUpTheSnake()
+            if (!((prev + 1) % APPLES_TO_SPEED_UP)) speedUpSnake()
             return prev + 1
         })
     }
 
     const placeNewApple = () => {
-        setApplePosition(randomAvailableCoords([snakeHeadPosition, ...snakeTailPositions, ...minePositions]))
+        setAppleCoords(randomAvailableCoords([headCoords, ...tailCoords, ...mineCoords]))
     }
 
-    const speedUpTheSnake = () => {
+    const speedUpSnake = () => {
         setMovesRefresh(prev => prev / SNAKE_SPEED_MULTIPLIER)
     }
 
@@ -126,19 +115,19 @@ const Game = ({ onGameOver }: Props) => {
     }
 
     const isGameOver = () => {
-        if (WALLS && !isWithinGrid(snakeHeadPosition)) {
+        if (WALLS && !isWithinGrid(headCoords)) {
             console.log("Crashed into a wall")
             return true
         }
-        for (let tail of snakeTailPositions) {
-            if (isObjectsEqual(tail, snakeHeadPosition)) {
+        for (let tail of tailCoords) {
+            if (isObjectsEqual(tail, headCoords)) {
                 console.log("Bit own tail")
                 return true
             }
         }
 
-        for (let mine of minePositions) {
-            if (isObjectsEqual(mine, snakeHeadPosition)) {
+        for (let mine of mineCoords) {
+            if (isObjectsEqual(mine, headCoords)) {
                 console.log("Stepped on a mine")
                 return true
             }
@@ -152,7 +141,7 @@ const Game = ({ onGameOver }: Props) => {
     return (
         <div className="Game">
             <Score score={applesEaten} />
-            <Grid apple={applePosition} snakeHead={snakeHeadPosition} snakeTail={snakeTailPositions} mines={minePositions} />
+            <Grid apple={appleCoords} snakeHead={headCoords} snakeTail={tailCoords} mines={mineCoords} />
         </div>
     )
 }
