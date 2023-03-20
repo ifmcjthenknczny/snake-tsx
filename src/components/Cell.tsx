@@ -1,4 +1,4 @@
-import { CellColor } from '../types'
+import { CellColor } from '../utils/types'
 
 export type Props = {
     color: CellColor

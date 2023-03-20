@@ -1,6 +1,11 @@
 import { Coords, Key } from "./types";
-import { BOARD_SIZE, OPPOSITE_DIRECTIONS, WALLS } from "./conts";
-import { randInt, randomElement, isObjectsEqual } from "./utils";
+import {
+  BOARD_SIZE,
+  OPPOSITE_DIRECTIONS,
+  OPTIONS_PROPERTIES,
+} from "./consts";
+import { randInt, randomElement, isObjectEqual } from "./utils";
+import { Option } from "./types";
 
 export const randomCoords = () => ({
   x: randInt(0, BOARD_SIZE.x),
@@ -20,9 +25,8 @@ export const randomAvailableCoords = (occupiedCoords: Coords[]) => {
 export const generateStartingSnakeTail = (
   startingLength: number,
   startingHeadPosition: Coords,
-  startingDirection: Key
+  startingDirection: Key,
 ) => {
-  debugger;
   const startingTailDirectionsOrder: Record<number, Key> = {
     1: "ArrowRight",
     2: "ArrowDown",
@@ -40,7 +44,7 @@ export const generateStartingSnakeTail = (
         ? startingHeadPosition
         : intToCoords(tailCoordsInt.at(-1)),
       direction,
-      true
+      true,
     );
     if (
       isWithinGrid(proposedTailCoords) &&
@@ -52,7 +56,7 @@ export const generateStartingSnakeTail = (
         (directionIndex + 1) % Object.keys(startingTailDirectionsOrder).length;
     }
   }
-  return tailCoordsInt.slice(1,).map(intToCoords);
+  return tailCoordsInt.slice(1).map(intToCoords);
 };
 
 export const coordsToInt = (coords: Coords) =>
@@ -62,6 +66,16 @@ export const intToCoords = (int: number) => ({
   x: int % BOARD_SIZE.x,
   y: Math.floor(int / BOARD_SIZE.x),
 });
+
+export const toNumber = (value: number | boolean) => {
+  if (typeof value === 'boolean') {
+      if (value) {
+          return 1
+      }
+      return 0
+  }
+  return value
+}
 
 export const isWithinGrid = (coords: Coords) =>
   coords.x >= 0 &&
@@ -80,6 +94,14 @@ export const rangeExclude = (
     )
     .filter((i) => i !== undefined);
 
+const rangeWithModulo = (start: number, end: number, modulo: number) => {
+  if (end < start) {
+    const length = modulo - start + 1 + end;
+    return [...Array(length)].map((_, i) => (i + start) % modulo);
+  }
+  return [...Array(end - start)].map((_, i) => i + start);
+};
+
 export const isAboutToGoOutsideGrid = (key: Key, head: Coords) => {
   if (key === "ArrowLeft" && head.x === 0) return true;
   if (key === "ArrowRight" && head.x === BOARD_SIZE.x - 1) return true;
@@ -91,7 +113,7 @@ export const isAboutToGoOutsideGrid = (key: Key, head: Coords) => {
 export const nextHeadPosition = (
   headCoords: Coords,
   currentKey: Key,
-  isWalls: boolean = WALLS
+  isWalls: boolean
 ) => {
   const skipToOtherSide =
     !isWalls && isAboutToGoOutsideGrid(currentKey, headCoords);
@@ -106,28 +128,90 @@ export const nextHeadPosition = (
 };
 
 export const isEatingApple = (headCoords: Coords, appleCoords: Coords) =>
-  isObjectsEqual(headCoords, appleCoords);
+  isObjectEqual(headCoords, appleCoords);
 
 export const isGameOver = (
   headCoords: Coords,
   tailCoords: Coords[],
-  mineCoords: Coords[]
+  mineCoords: Coords[],
+  isWalls: boolean
 ) => {
-  if (WALLS && !isWithinGrid(headCoords)) {
-    console.log("Crashed into a wall");
-    return true;
+  if (isWalls && !isWithinGrid(headCoords)) {
+    return "wall"
   }
   for (let tail of tailCoords) {
-    if (isObjectsEqual(tail, headCoords)) {
-      console.log("Bit own tail");
-      return true;
+    if (isObjectEqual(tail, headCoords)) {
+      return "tail"
     }
   }
   for (let mine of mineCoords) {
-    if (isObjectsEqual(mine, headCoords)) {
-      console.log("Stepped on a mine");
-      return true;
+    if (isObjectEqual(mine, headCoords)) {
+      return "mine"
     }
   }
   return false;
+};
+
+const findMinAndMaxCoord = (
+  distance: number,
+  coord: number,
+  boardSize: number,
+  isWalls: boolean
+) => {
+  let min = coord - distance;
+  let max = coord + distance;
+  if (isWalls) {
+    min = Math.max(min, 0);
+    max = Math.min(max, boardSize - 1);
+  } else {
+    min = min < 0 ? min + boardSize : min;
+    max = max > boardSize - 1 ? max % boardSize : max;
+  }
+  return [min, max];
+};
+
+export const findCellsInRadius = (distance: number, referenceCell: Coords, isWalls: boolean) => {
+  const [xMin, xMax] = findMinAndMaxCoord(
+    distance,
+    referenceCell.x,
+    BOARD_SIZE.x,
+    isWalls
+  );
+  const [yMin, yMax] = findMinAndMaxCoord(
+    distance,
+    referenceCell.y,
+    BOARD_SIZE.y,
+    isWalls
+  );
+  const xRange = rangeWithModulo(xMin, xMax, BOARD_SIZE.x);
+  const yRange = rangeWithModulo(yMin, yMax, BOARD_SIZE.y);
+  const cellsInSquare = [];
+  for (const x of xRange) {
+    for (const y of yRange) {
+      cellsInSquare.push({ x, y });
+    }
+  }
+  return cellsInSquare;
+};
+
+export const calculateRealOptionValue = (option: Option, value: number | boolean) => {
+  const { min, max, realMin, realMax, inverselyProportional } =
+    OPTIONS_PROPERTIES[option];
+
+  if (typeof value === "boolean" || typeof min === "boolean" || typeof max === "boolean") {
+    return value
+  }
+
+  if (realMin && realMax && !inverselyProportional) {
+    return realMin + (realMax - realMin) * (value - min) / (max - min);
+  }
+
+  if (realMin && realMax && inverselyProportional) {
+    return realMin + (realMax - realMin) * (max - value) / (max - min);
+  }
+
+  if (inverselyProportional) {
+    return max - (max - min) * (min - value / max);
+  }
+  return value;
 };

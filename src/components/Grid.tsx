@@ -1,38 +1,57 @@
-import { useEffect, useState } from "react";
-import { BOARD_SIZE, ELEMENTS_COLORS } from "../conts";
+import { useEffect, useMemo, useState } from "react";
+import { BOARD_SIZE, ELEMENTS_COLORS, CELLS_COUNT } from "../utils/consts";
 import '../styles/Grid.css';
-import { CellColor, Coords } from "../types";
+import { CellColor, Coords } from "../utils/types";
 import Cell from "./Cell";
-import { coordsToInt, isWithinGrid } from "../helpers";
+import { coordsToInt, isWithinGrid } from "../utils/helpers";
 
 type Props = {
     apple: Coords;
     snakeHead: Coords;
     snakeTail: Coords[];
     mines: Coords[]
+    isWalls: boolean
 }
 
-const Grid = ({ apple, snakeHead, snakeTail, mines }: Props) => {
-    const cellsQuantity = BOARD_SIZE.x * BOARD_SIZE.y;
-    const [grid, setGrid] = useState<CellColor[]>(new Array<CellColor>(cellsQuantity).fill('darkgray'))
+
+
+const Grid = ({ apple, snakeHead, snakeTail, mines, isWalls }: Props) => {
+    const [grid, setGrid] = useState<CellColor[]>(new Array<CellColor>(CELLS_COUNT).fill('darkgray'))
+
+    const appleIntCoords = useMemo(() => coordsToInt(apple), [apple])
+    const minesIntCoords = useMemo(() => mines.map((coords) => coordsToInt(coords)), [mines])
+
+    const GRID_STYLE = {
+        width: `calc(3.5vmin * ${BOARD_SIZE.x} + 0.4vmin * ${BOARD_SIZE.x - 1})`,
+        height: `calc(3.5vmin * ${BOARD_SIZE.y} + 0.4vmin * ${BOARD_SIZE.y - 1})`,
+        display: "grid",
+        "grid-template-columns": `repeat(${BOARD_SIZE.x}, 3.5vmin)`,
+        "grid-template-rows": `repeat(${BOARD_SIZE.y}, 3.5vmin)`,
+        "grid-column-gap": "0.4vmin",
+        "grid-row-gap": "0.4vmin",
+        border: `${isWalls ? 10 : 2}px black solid`,
+        "justify-self": "center",
+        "align-self": "center",
+        cursor: "none",
+    }
 
     useEffect(() => {
         setCellColors()
     }, [apple, snakeHead, snakeTail, mines]) //eslint-disable-line react-hooks/exhaustive-deps
 
     const setCellColors = () => {
-        const newGridState = new Array<CellColor>(cellsQuantity).fill(ELEMENTS_COLORS.empty);
-        newGridState[coordsToInt(apple)] = ELEMENTS_COLORS.apple;
+        const newGridState = new Array<CellColor>(CELLS_COUNT).fill(ELEMENTS_COLORS.empty);
+        newGridState[appleIntCoords] = ELEMENTS_COLORS.apple;
         snakeTail.forEach(tail => newGridState[coordsToInt(tail)] = ELEMENTS_COLORS.tail);
-        mines.forEach(mine => newGridState[coordsToInt(mine)] = ELEMENTS_COLORS.mine);
-        if (isWithinGrid(snakeHead)) {
+        minesIntCoords.forEach(mine => newGridState[mine] = ELEMENTS_COLORS.mine);
+        if ((isWalls && isWithinGrid(snakeHead)) || !isWalls) {
             newGridState[coordsToInt(snakeHead)] = ELEMENTS_COLORS.head;
         }
         setGrid(newGridState)
     }
 
     return (
-        <div className="Grid">
+        <div style={GRID_STYLE}>
             {grid.map((color, index) => <Cell key={index} color={color} />)}
         </div>
     )

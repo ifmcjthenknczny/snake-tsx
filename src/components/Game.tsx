@@ -1,23 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
-import { CONTROL_KEYS, APPLES_TO_SPEED_UP_APPLE_CHANGE_POSITION, APPLES_TO_SPEED_UP_SNAKE, APPLE_CHANGE_POSITION_INTERVAL_MS, APPLE_CHANGE_POSITION_INTERVAL_MULTIPLIER, OPPOSITE_DIRECTIONS, NEW_MINE_INTERVAL_MS, SNAKE_SPEED_MULTIPLIER, STARTING_DIRECTION, STARTING_HEAD_POSITION, STARTING_LENGTH, STARTING_MINE, STARTING_MOVE_REFRESH_MS } from '../conts';
-import { generateStartingSnakeTail, nextHeadPosition, randomAvailableCoords, isEatingApple, isGameOver } from '../helpers';
+import { CONTROL_KEYS, OPPOSITE_DIRECTIONS, STARTING_DIRECTION, STARTING_HEAD_POSITION, STARTING_MINE, NEW_MINE_DISTANCE_FROM_HEAD, MENU_KEY } from '../utils/consts';
+import { generateStartingSnakeTail, nextHeadPosition, randomAvailableCoords, isEatingApple, isGameOver, findCellsInRadius } from '../utils/helpers';
 import '../styles/Game.css';
-import { Coords, Key } from '../types';
+import { Coords, Key, OptionsWithValue } from '../utils/types';
 import Grid from './Grid';
 import Score from './Score';
+import { GameOverReason } from '../utils/types';
 
 type Props = {
-    onGameOver: (score: number) => void;
+    onGameOver: (score: number, reason: GameOverReason) => void;
+    handleMenu: () => void;
+    settings: OptionsWithValue
 }
 
-const Game = ({ onGameOver }: Props) => {
-    const [moveRefresh, setMovesRefresh] = useState(STARTING_MOVE_REFRESH_MS);
+const Game = ({ onGameOver, handleMenu, settings }: Props) => {
+    const [moveRefresh, setMovesRefresh] = useState(settings.STARTING_MOVE_REFRESH_MS as number);
     const [headCoords, setHeadCoords] = useState<Coords>(STARTING_HEAD_POSITION)
-    const [tailCoords, setTailCoords] = useState<Coords[]>(generateStartingSnakeTail(STARTING_LENGTH, STARTING_HEAD_POSITION, STARTING_DIRECTION))
+    const [tailCoords, setTailCoords] = useState<Coords[]>(generateStartingSnakeTail(settings.STARTING_LENGTH as number, STARTING_HEAD_POSITION, STARTING_DIRECTION))
 
     const [applesEaten, setApplesEaten] = useState(0);
     const [appleCoords, setAppleCoords] = useState(randomAvailableCoords([headCoords, ...tailCoords]));
-    const [appleRefresh, setAppleRefresh] = useState(APPLE_CHANGE_POSITION_INTERVAL_MS);
+    const [appleRefresh, setAppleRefresh] = useState(settings.APPLE_CHANGE_POSITION_INTERVAL_MS as number);
 
     const [mineCoords, setMineCoords] = useState<Coords[]>(STARTING_MINE ? [randomAvailableCoords([headCoords, ...tailCoords, appleCoords])] : [])
 
@@ -28,8 +31,13 @@ const Game = ({ onGameOver }: Props) => {
 
     const gameIteration = () => {
         snakeMoveIteration()
-        if (isGameOver(headCoords, tailCoords, mineCoords)) onGameOver(applesEaten)
-        if (isEatingApple(headCoords, appleCoords)) eatApple()
+        const gameOver = isGameOver(headCoords, tailCoords, mineCoords, settings.WALLS as boolean)
+        if (gameOver) {
+            onGameOver(applesEaten, gameOver)
+        }
+        if (isEatingApple(headCoords, appleCoords)) {
+            eatApple()
+        }
     }
 
     useEffect(() => {
@@ -40,14 +48,14 @@ const Game = ({ onGameOver }: Props) => {
     }, [moveRefresh, headCoords])  //eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        const mineInterval = setInterval(placeNewMine, NEW_MINE_INTERVAL_MS)
+        const mineInterval = setInterval(placeNewMine, settings.NEW_MINE_INTERVAL_MS as number)
         return () => {
             clearInterval(mineInterval)
         }
     }, [])  //eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        const appleTimeout = setTimeout(placeNewApple, APPLE_CHANGE_POSITION_INTERVAL_MS)
+        const appleTimeout = setTimeout(placeNewApple, settings.APPLE_CHANGE_POSITION_INTERVAL_MS as number)
         return () => {
             clearTimeout(appleTimeout)
         }
@@ -63,7 +71,8 @@ const Game = ({ onGameOver }: Props) => {
     }
 
     const placeNewMine = () => {
-        setMineCoords(prev => [...prev, randomAvailableCoords([appleCoords, headCoords, ...tailCoords])])
+        const cellsNearHead = NEW_MINE_DISTANCE_FROM_HEAD ? findCellsInRadius(NEW_MINE_DISTANCE_FROM_HEAD, lastHeadPositionRef.current, settings.WALLS as boolean) : []
+        setMineCoords(prev => [...prev, randomAvailableCoords([appleCoords, headCoords, ...tailCoords, ...cellsNearHead])])
     }
 
     const snakeMoveIteration = () => {
@@ -74,7 +83,7 @@ const Game = ({ onGameOver }: Props) => {
     }
 
     const moveHead = () => {
-        setHeadCoords(prev => nextHeadPosition(prev, keyRef.current))
+        setHeadCoords(prev => nextHeadPosition(prev, keyRef.current, settings.WALLS as boolean))
     }
 
     const moveTail = () => {
@@ -83,8 +92,8 @@ const Game = ({ onGameOver }: Props) => {
 
     const eatApple = () => {
         setApplesEaten(prev => {
-            if (!((prev + 1) % APPLES_TO_SPEED_UP_SNAKE)) speedUpSnake()
-            if (!((prev + 1) % APPLES_TO_SPEED_UP_APPLE_CHANGE_POSITION)) speedUpAppleChangingPosition()
+            if (!((prev + 1) % (settings.APPLES_TO_SPEED_UP_SNAKE as number))) speedUpSnake()
+            if (!((prev + 1) % (settings.APPLES_TO_SPEED_UP_SNAKE as number))) speedUpAppleChangingPosition()
             return prev + 1
         })
         placeNewApple()
@@ -95,31 +104,36 @@ const Game = ({ onGameOver }: Props) => {
     }
 
     const speedUpSnake = () => {
-        setMovesRefresh(prev => prev / SNAKE_SPEED_MULTIPLIER)
+        setMovesRefresh(prev => prev / (settings.SNAKE_SPEED_MULTIPLIER as number))
     }
 
     const speedUpAppleChangingPosition = () => {
-        setAppleRefresh(prev => prev / APPLE_CHANGE_POSITION_INTERVAL_MULTIPLIER)
+        if (settings.APPLE_CHANGES_POSITION && settings.APPLE_CHANGE_POSITION_INTERVAL_WITH_SNAKE) {
+            setAppleRefresh(prev => prev /  (settings.SNAKE_SPEED_MULTIPLIER as number))
+        }
     }
 
-    const handleKeydown = (e: KeyboardEvent) => {
+    const handleKeypush = (e: KeyboardEvent) => {
         if ((CONTROL_KEYS as string[]).includes(e.key) && !keyFired.current) {
             keyFired.current = true
             setLastKey(e.key as Key)
         }
+        else if (e.key === MENU_KEY) {
+            handleMenu()
+        }
     }
 
-    const handleKeyup = () => {
+    const handleKeylift = () => {
         keyFired.current = false
     }
 
-    document.addEventListener('keydown', handleKeydown)
-    document.addEventListener('keyup', handleKeyup)
+    document.addEventListener('keydown', handleKeypush)
+    document.addEventListener('keyup', handleKeylift)
 
     return (
         <div className="Game">
             <Score score={applesEaten} />
-            <Grid apple={appleCoords} snakeHead={headCoords} snakeTail={tailCoords} mines={mineCoords} />
+            <Grid apple={appleCoords} snakeHead={headCoords} snakeTail={tailCoords} mines={mineCoords} isWalls={settings.WALLS as boolean} />
         </div>
     )
 }

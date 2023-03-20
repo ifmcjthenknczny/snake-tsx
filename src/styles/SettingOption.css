@@ -1,0 +1,12 @@
+.SettingOption__labelWithInput {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+    margin-right: 10px;
+}
+
+.SettingOption {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+}

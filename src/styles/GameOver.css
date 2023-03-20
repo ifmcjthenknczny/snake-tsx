@@ -20,12 +20,11 @@
     padding: 1em;
 }
 
-.GameOver__again:hover {
-    color: red;
-    cursor: pointer;
-    transition: color .5s;
-}
-
 .GameOver__title {
     text-shadow: 2px 2px #696969;
+}
+
+.GameOver__options {
+    display: flex;
+    flex-direction: column;
 }
