@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { BOARD_SIZE, ELEMENTS_COLORS, CELLS_COUNT } from "../utils/consts";
-import '../styles/Grid.css';
 import { CellColor, Coords } from "../utils/types";
 import Cell from "./Cell";
 import { coordsToInt, isWithinGrid } from "../utils/helpers";
@@ -13,8 +12,6 @@ type Props = {
     isWalls: boolean
 }
 
-
-
 const Grid = ({ apple, snakeHead, snakeTail, mines, isWalls }: Props) => {
     const [grid, setGrid] = useState<CellColor[]>(new Array<CellColor>(CELLS_COUNT).fill('darkgray'))
 
@@ -25,13 +22,13 @@ const Grid = ({ apple, snakeHead, snakeTail, mines, isWalls }: Props) => {
         width: `calc(3.5vmin * ${BOARD_SIZE.x} + 0.4vmin * ${BOARD_SIZE.x - 1})`,
         height: `calc(3.5vmin * ${BOARD_SIZE.y} + 0.4vmin * ${BOARD_SIZE.y - 1})`,
         display: "grid",
-        "grid-template-columns": `repeat(${BOARD_SIZE.x}, 3.5vmin)`,
-        "grid-template-rows": `repeat(${BOARD_SIZE.y}, 3.5vmin)`,
-        "grid-column-gap": "0.4vmin",
-        "grid-row-gap": "0.4vmin",
+        gridTemplateColumns: `repeat(${BOARD_SIZE.x}, 3.5vmin)`,
+        gridTemplateRows: `repeat(${BOARD_SIZE.y}, 3.5vmin)`,
+        gridColumnGap: "0.4vmin",
+        gridRowGap: "0.4vmin",
         border: `${isWalls ? 10 : 2}px black solid`,
-        "justify-self": "center",
-        "align-self": "center",
+        justifySelf: "center",
+        alignSelf: "center",
         cursor: "none",
     }
 

@@ -1,4 +1,11 @@
-import { Key, Element, CellColor, OptionProp, Option, OptionsWithValue } from "./types";
+import {
+  Key,
+  Element,
+  CellColor,
+  OptionProp,
+  OptionName,
+  OptionsWithValue,
+} from "./types";
 
 // BOARD
 export const BOARD_SIZE = {
@@ -56,13 +63,13 @@ export const OPTIONS = [
   "SNAKE_SPEED_MULTIPLIER",
   "APPLES_TO_SPEED_UP_SNAKE",
   "WALLS",
+  "NEW_MINE_INTERVAL_MS",
   "APPLE_CHANGES_POSITION",
   "APPLE_CHANGE_POSITION_INTERVAL_MS",
   "APPLE_CHANGE_POSITION_INTERVAL_WITH_SNAKE",
-  "NEW_MINE_INTERVAL_MS",
 ] as const;
 
-export const OPTIONS_PROPERTIES: Record<Option, OptionProp> = {
+export const OPTIONS_PROPERTIES: Record<OptionName, OptionProp> = {
   STARTING_MOVE_REFRESH_MS: {
     min: 1,
     max: 10,
@@ -79,7 +86,7 @@ export const OPTIONS_PROPERTIES: Record<Option, OptionProp> = {
     step: 0.05,
     defaultValue: 1.25,
     label: "SPEED MULTIPLIER",
-    isDecimal: true
+    isDecimal: true,
   },
   APPLES_TO_SPEED_UP_SNAKE: {
     min: 1,
@@ -95,7 +102,7 @@ export const OPTIONS_PROPERTIES: Record<Option, OptionProp> = {
     step: 1,
     realMin: 5000,
     realMax: 50000,
-    label: "APPLE CHANGING POSITION INTERVAL",
+    label: "INTERVAL",
     inverselyProportional: true,
     dependsOn: ["APPLE_CHANGES_POSITION"],
   },
@@ -104,7 +111,7 @@ export const OPTIONS_PROPERTIES: Record<Option, OptionProp> = {
     max: true,
     defaultValue: true,
     step: 1,
-    label: "APPLE CHANGING POSITION SPEEDS UP",
+    label: "SPEEDS UP",
     isBoolean: true,
     dependsOn: ["APPLE_CHANGES_POSITION"],
   },
@@ -143,6 +150,12 @@ export const OPTIONS_PROPERTIES: Record<Option, OptionProp> = {
   },
 };
 
-export const SETTINGS_DEFAULTS = Object.keys(OPTIONS_PROPERTIES).reduce((acc, option) => ({ ...acc, [option]: OPTIONS_PROPERTIES[option].defaultValue }), {} as OptionsWithValue)
+export const SETTINGS_DEFAULTS = Object.keys(OPTIONS_PROPERTIES).reduce(
+  (acc, option) => ({
+    ...acc,
+    [option]: OPTIONS_PROPERTIES[option].defaultValue,
+  }),
+  {} as OptionsWithValue
+);
 
-export const GAME_OVER_REASONS = ['wall', 'tail', 'mine'] as const
+export const GAME_OVER_REASONS = ["wall", "tail", "mine"] as const;

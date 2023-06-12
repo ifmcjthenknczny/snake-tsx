@@ -1,11 +1,13 @@
-import { OptionsWithValue, Option } from "../utils/types"
+import { OptionsWithValue, OptionName } from "../utils/types"
 import { OPTIONS_PROPERTIES } from "../utils/consts"
 import '../styles/SettingOption.css'
 import { useState } from "react"
 import { toNumber } from "../utils/helpers"
+import classNames from "classnames"
+import React, { useEffect } from 'react'
 
 type Props = {
-    name: Option
+    name: OptionName
     setSettings: React.Dispatch<React.SetStateAction<OptionsWithValue>>
     startingValue: number | boolean
 }
@@ -13,6 +15,13 @@ type Props = {
 const SettingOption = ({ name, setSettings, startingValue }: Props) => {
     const { min, max, step, label, isBoolean, isDecimal } = OPTIONS_PROPERTIES[name]
     const [value, setValue] = useState<number | boolean>(startingValue)
+    const [valueLabel, setValueLabel] = useState<string>(toValueLabel(startingValue))
+
+    useEffect(() => {
+        setValueLabel(toValueLabel(value, isDecimal))
+        console.log(valueLabel)
+    }, [value]) //eslint-disable-line react-hooks/exhaustive-deps
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (isBoolean) {
@@ -32,27 +41,20 @@ const SettingOption = ({ name, setSettings, startingValue }: Props) => {
 
     return (
         <div className="SettingOption">
-            <div className="SettingOption__labelWithInput">
-                <label className="SettingOption__label" htmlFor={name}>{label}</label>
-                <input className="SettingOption__input" type="range" value={toNumber(value)} min={toNumber(min)} max={toNumber(max)} step={toNumber(step)} onChange={handleChange} onClick={handleClick} />
-            </div>
-            <div className="SettingOption__value">{toValueLabel(value, isDecimal)}</div>
+            <label className={classNames("SettingOption__label", OPTIONS_PROPERTIES[name].dependsOn && "SettingOption__dependent")} htmlFor={name}>{label}</label>
+            <input className="SettingOption__input" type="range" value={toNumber(value)} min={toNumber(min)} max={toNumber(max)} step={toNumber(step)} onChange={handleChange} onClick={handleClick} />
+            <div className="SettingOption__value">{valueLabel}</div>
         </div>)
 }
 
-const toValueLabel = (value: number | boolean, isDecimal?: boolean) => {
+const toValueLabel = (value: number | boolean, isDecimal?: true) => {
     if (typeof value === 'boolean') {
-        return VALUE_LABELS[`${value}`]
+        return !!value ? 'ON' : 'OFF'
     }
     if (isDecimal) {
         return `${value.toFixed(2)}`
     }
     return `${value}`
-}
-
-const VALUE_LABELS = {
-    true: 'ON',
-    false: 'OFF'
 }
 
 export default SettingOption

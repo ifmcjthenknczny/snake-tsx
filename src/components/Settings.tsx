@@ -27,6 +27,6 @@ const Settings = ({ onGoBack, setSettings, settings }: Props) => {
     )
 }
 
-const filterOptionsToShow = (settings: OptionsWithValue) => OPTIONS.filter(option => !OPTIONS_PROPERTIES[option].dependsOn || OPTIONS_PROPERTIES[option].dependsOn.every(dependency => settings[dependency]))
+const filterOptionsToShow = (settings: OptionsWithValue) => OPTIONS.filter(option => !OPTIONS_PROPERTIES[option].dependsOn || OPTIONS_PROPERTIES[option].dependsOn.every(dependency => settings[dependency] === true))
 
 export default Settings

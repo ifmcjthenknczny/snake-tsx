@@ -1,12 +1,36 @@
-.SettingOption__labelWithInput {
-    display: flex;
-    justify-content: space-between;
-    flex: 1;
-    margin-right: 10px;
+.SettingOption__label {
+  text-align: left;
 }
 
 .SettingOption {
-    display: flex;
-    justify-content: space-between;
-    flex: 1;
+  display: grid;
+  width: 700px;
+  grid-template-columns: auto 180px 80px;
+  column-gap: 10px;
+}
+
+.SettingOption__dependent {
+  margin-left: 20px;
+}
+
+.SettingOption__value {
+  text-align: right;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-runnable-track, input[type="range"]::-moz-range-track {
+  background: blue;
+  height: 0.5rem;
+}
+
+input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb {
+    background: red;
+    border-radius: 0;
+    border: 2px black solid;
 }

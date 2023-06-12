@@ -1,6 +1,7 @@
 import Logo from './Logo'
 import '../styles/Menu.css'
 import ClickableText from './ClickableText'
+import React, {useRef} from 'react'
 
 type Props = {
     onNewGame: () => void

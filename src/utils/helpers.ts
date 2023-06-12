@@ -1,11 +1,7 @@
 import { Coords, Key } from "./types";
-import {
-  BOARD_SIZE,
-  OPPOSITE_DIRECTIONS,
-  OPTIONS_PROPERTIES,
-} from "./consts";
+import { BOARD_SIZE, OPPOSITE_DIRECTIONS, OPTIONS_PROPERTIES } from "./consts";
 import { randInt, randomElement, isObjectEqual } from "./utils";
-import { Option } from "./types";
+import { OptionName } from "./types";
 
 export const randomCoords = () => ({
   x: randInt(0, BOARD_SIZE.x),
@@ -25,7 +21,7 @@ export const randomAvailableCoords = (occupiedCoords: Coords[]) => {
 export const generateStartingSnakeTail = (
   startingLength: number,
   startingHeadPosition: Coords,
-  startingDirection: Key,
+  startingDirection: Key
 ) => {
   const startingTailDirectionsOrder: Record<number, Key> = {
     1: "ArrowRight",
@@ -44,7 +40,7 @@ export const generateStartingSnakeTail = (
         ? startingHeadPosition
         : intToCoords(tailCoordsInt.at(-1)),
       direction,
-      true,
+      true
     );
     if (
       isWithinGrid(proposedTailCoords) &&
@@ -68,14 +64,14 @@ export const intToCoords = (int: number) => ({
 });
 
 export const toNumber = (value: number | boolean) => {
-  if (typeof value === 'boolean') {
-      if (value) {
-          return 1
-      }
-      return 0
+  if (typeof value === "boolean") {
+    if (value) {
+      return 1;
+    }
+    return 0;
   }
-  return value
-}
+  return value;
+};
 
 export const isWithinGrid = (coords: Coords) =>
   coords.x >= 0 &&
@@ -137,16 +133,16 @@ export const isGameOver = (
   isWalls: boolean
 ) => {
   if (isWalls && !isWithinGrid(headCoords)) {
-    return "wall"
+    return "wall";
   }
   for (let tail of tailCoords) {
     if (isObjectEqual(tail, headCoords)) {
-      return "tail"
+      return "tail";
     }
   }
   for (let mine of mineCoords) {
     if (isObjectEqual(mine, headCoords)) {
-      return "mine"
+      return "mine";
     }
   }
   return false;
@@ -170,7 +166,11 @@ const findMinAndMaxCoord = (
   return [min, max];
 };
 
-export const findCellsInRadius = (distance: number, referenceCell: Coords, isWalls: boolean) => {
+export const findCellsInRadius = (
+  distance: number,
+  referenceCell: Coords,
+  isWalls: boolean
+) => {
   const [xMin, xMax] = findMinAndMaxCoord(
     distance,
     referenceCell.x,
@@ -194,20 +194,27 @@ export const findCellsInRadius = (distance: number, referenceCell: Coords, isWal
   return cellsInSquare;
 };
 
-export const calculateRealOptionValue = (option: Option, value: number | boolean) => {
+export const calculateRealOptionValue = (
+  option: OptionName,
+  value: number | boolean
+) => {
   const { min, max, realMin, realMax, inverselyProportional } =
     OPTIONS_PROPERTIES[option];
 
-  if (typeof value === "boolean" || typeof min === "boolean" || typeof max === "boolean") {
-    return value
+  if (
+    typeof value === "boolean" ||
+    typeof min === "boolean" ||
+    typeof max === "boolean"
+  ) {
+    return value;
   }
 
   if (realMin && realMax && !inverselyProportional) {
-    return realMin + (realMax - realMin) * (value - min) / (max - min);
+    return realMin + ((realMax - realMin) * (value - min)) / (max - min);
   }
 
   if (realMin && realMax && inverselyProportional) {
-    return realMin + (realMax - realMin) * (max - value) / (max - min);
+    return realMin + ((realMax - realMin) * (max - value)) / (max - min);
   }
 
   if (inverselyProportional) {

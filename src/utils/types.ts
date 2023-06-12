@@ -11,7 +11,7 @@ export type Element = "apple" | "empty" | "head" | "tail" | "mine";
 
 export type Key = "ArrowLeft" | "ArrowRight" | "ArrowUp" | "ArrowDown";
 
-export type Option = typeof OPTIONS[number];
+export type OptionName = (typeof OPTIONS)[number];
 
 export type OptionProp = {
   min: number | boolean;
@@ -23,11 +23,11 @@ export type OptionProp = {
   label: string;
   inverselyProportional?: true;
   isBoolean?: true;
-  dependsOn?: Option[];
+  dependsOn?: OptionName[];
   isDecimal?: true;
 };
-export type OptionsWithValue = Record<Option, OptionProp["defaultValue"]>;
+export type OptionsWithValue = Record<OptionName, OptionProp["defaultValue"]>;
 
 export type GameState = "menu" | "settings" | "gameOver" | "playing";
 
-export type GameOverReason = typeof GAME_OVER_REASONS[number];
+export type GameOverReason = (typeof GAME_OVER_REASONS)[number];

@@ -43,7 +43,7 @@ const App = () => {
             highScore.current = `${score}`
         }
     }
-    console.log(settings)
+    // console.log(settings)
     // console.log(calculateRealSettingsValue(settings))
 
     return (
