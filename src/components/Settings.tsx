@@ -2,8 +2,10 @@ import ClickableText from "./ClickableText"
 import Logo from "./Logo"
 import "../styles/Settings.css"
 import { OptionsWithValue } from "../utils/types"
-import { OPTIONS, OPTIONS_PROPERTIES } from "../utils/consts"
+import { MENU_KEY, OPTIONS, OPTIONS_PROPERTIES } from "../utils/consts"
 import SettingOption from './SettingOption'
+import React from "react"
+import { useKeyClick } from "../utils/hooks"
 
 type Props = {
     onGoBack: () => void
@@ -15,6 +17,14 @@ const GO_BACK_TEXT = "GO BACK"
 const SETTINGS_TITLE = "SETTINGS"
 
 const Settings = ({ onGoBack, setSettings, settings }: Props) => {
+    const handleKeydown = (e: KeyboardEvent) => {
+        if (e.key === MENU_KEY) {
+            onGoBack()
+        }
+    }
+
+    useKeyClick(handleKeydown)
+
     return (
         <div className="Settings">
             <Logo />

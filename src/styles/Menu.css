@@ -20,3 +20,9 @@
 .Menu__credits {
     font-size: 8px;
 }
+
+.Menu__focused {
+    color: red;
+    cursor: pointer;
+    transition: color .5s;
+}

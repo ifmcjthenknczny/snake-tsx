@@ -1,4 +1,5 @@
 import { CellColor } from '../utils/types'
+import React from 'react'
 
 export type Props = {
     color: CellColor

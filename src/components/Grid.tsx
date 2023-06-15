@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { BOARD_SIZE, ELEMENTS_COLORS, CELLS_COUNT } from "../utils/consts";
 import { CellColor, Coords } from "../utils/types";
 import Cell from "./Cell";

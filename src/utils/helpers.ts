@@ -222,3 +222,5 @@ export const calculateRealOptionValue = (
   }
   return value;
 };
+
+export const pointsForEatingApple = (snakeLength: number, snakeMoveInterval: number, minesPresent: number) => Math.ceil((snakeLength + minesPresent * 0.5) * (BOARD_SIZE.x * BOARD_SIZE.y / 400) * Math.min((OPTIONS_PROPERTIES.STARTING_MOVE_REFRESH_MS.realMax / snakeMoveInterval), 20))

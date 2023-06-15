@@ -27,7 +27,7 @@ This is just Snake game popular from old Nokia phones written in React with Type
 
 ## Status
 
-Project is: _finished_
+Project is: _in progress_
 
 ## Contact
 

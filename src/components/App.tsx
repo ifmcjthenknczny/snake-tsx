@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { LOCAL_STORAGE_HIGH_SCORE_NAME, SETTINGS_DEFAULTS, OPTIONS } from "../utils/consts"
 import Game from "./Game"
 import GameOver from "./GameOver"
 import Menu from "./Menu"
 import Settings from './Settings'
 import '../styles/App.css'
-import { OptionsWithValue, GameState, GameOverReason } from "../utils/types"
+import { OptionsWithValue, GameState, GameOverReason, MenuOption } from "../utils/types"
 import { calculateRealOptionValue } from "../utils/helpers"
 
 const App = () => {
@@ -43,15 +43,24 @@ const App = () => {
             highScore.current = `${score}`
         }
     }
-    // console.log(settings)
-    // console.log(calculateRealSettingsValue(settings))
+
+    const MENU_OPTIONS: { label: MenuOption; onChosen: () => void }[] = [
+        {
+            label: "NEW GAME",
+            onChosen: handleNewGame
+        },
+        {
+            label: "SETTINGS",
+            onChosen: handleSettings
+        }
+    ]
 
     return (
         <div className="App">
             {gameState === 'gameOver' &&
                 <GameOver score={localScore.current} highScore={+highScore.current} onNewGame={handleNewGame} onMenu={handleMenu} reason={gameOverReason} />}
-            {gameState === 'playing' && <Game onGameOver={handleGameOver} handleMenu={handleMenu} settings={OPTIONS.reduce((acc, option) => ({ ...acc, [option]: calculateRealOptionValue(option, settings[option]) }), {} as OptionsWithValue)} />}
-            {gameState === 'menu' && <Menu onNewGame={handleNewGame} onSettings={handleSettings} />}
+            {gameState === 'playing' && <Game onGameOver={handleGameOver} handleMenu={handleMenu} settings={OPTIONS.reduce((acc, optionName) => ({ ...acc, [optionName]: calculateRealOptionValue(optionName, settings[optionName]) }), {} as OptionsWithValue)} />}
+            {gameState === 'menu' && <Menu options={MENU_OPTIONS} />}
             {gameState === 'settings' && <Settings onGoBack={handleMenu} setSettings={setSettings} settings={settings} />}
         </div>
     )

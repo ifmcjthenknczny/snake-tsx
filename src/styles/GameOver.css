@@ -16,7 +16,7 @@
     height: calc(3.5vmin * 20 + 0.4vmin * 19);
 }
 
-.GameOver__again {
+.GameOver__again, .GameOver__settings {
     padding: 1em;
 }
 

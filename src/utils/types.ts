@@ -31,3 +31,5 @@ export type OptionsWithValue = Record<OptionName, OptionProp["defaultValue"]>;
 export type GameState = "menu" | "settings" | "gameOver" | "playing";
 
 export type GameOverReason = (typeof GAME_OVER_REASONS)[number];
+
+export type MenuOption = 'NEW GAME' | 'SETTINGS'

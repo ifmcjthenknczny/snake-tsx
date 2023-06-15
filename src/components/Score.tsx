@@ -1,4 +1,5 @@
 import '../styles/Score.css'
+import React from 'react'
 
 type Props = {
     score: number

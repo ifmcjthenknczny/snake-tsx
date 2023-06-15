@@ -19,14 +19,11 @@ const SettingOption = ({ name, setSettings, startingValue }: Props) => {
 
     useEffect(() => {
         setValueLabel(toValueLabel(value, isDecimal))
-        console.log(valueLabel)
     }, [value]) //eslint-disable-line react-hooks/exhaustive-deps
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (isBoolean) {
-            setValue(!+e.target.value)
-        } else {
+        if (!isBoolean) {
             setValue(+e.target.value)
         }
         setSettings(prevSettings => ({ ...prevSettings, [name]: isBoolean ? !!+e.target.value : +e.target.value }))
@@ -34,15 +31,20 @@ const SettingOption = ({ name, setSettings, startingValue }: Props) => {
 
     const handleClick = () => {
         if (isBoolean) {
-            setValue(prevValue => +!prevValue)
+            setValue(prevValue => !prevValue)
             setSettings(prevSettings => ({ ...prevSettings, [name]: !prevSettings[name] }))
         }
+    }
+
+    const handleDoubleClick = () => {
+        setValue(OPTIONS_PROPERTIES[name].defaultValue)
+        setSettings(prevSettings => ({ ...prevSettings, [name]: OPTIONS_PROPERTIES[name].defaultValue }))
     }
 
     return (
         <div className="SettingOption">
             <label className={classNames("SettingOption__label", OPTIONS_PROPERTIES[name].dependsOn && "SettingOption__dependent")} htmlFor={name}>{label}</label>
-            <input className="SettingOption__input" type="range" value={toNumber(value)} min={toNumber(min)} max={toNumber(max)} step={toNumber(step)} onChange={handleChange} onClick={handleClick} />
+            <input className="SettingOption__input" type="range" value={toNumber(value)} min={toNumber(min)} max={toNumber(max)} step={toNumber(step)} onChange={handleChange} onClick={handleClick} onDoubleClick={handleDoubleClick} />
             <div className="SettingOption__value">{valueLabel}</div>
         </div>)
 }
