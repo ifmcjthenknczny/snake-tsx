@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { BOARD_SIZE, ELEMENTS_COLORS, CELLS_COUNT } from "../utils/consts";
-import { CellColor, Coords } from "../utils/types";
+import { BOARD_SIZE, ELEMENTS_COLORS, CELLS_COUNT } from "../constants/board";
+import { CellColor, Coords } from "../types/types";
 import Cell from "./Cell";
-import { coordsToInt, isWithinGrid } from "../utils/helpers";
+import { coordsToInt, isWithinGrid } from "../helpers/board";
 
 type Props = {
     apple: Coords;

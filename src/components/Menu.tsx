@@ -2,9 +2,9 @@ import Logo from './Logo'
 import '../styles/Menu.css'
 import ClickableText from './ClickableText'
 import React, { useState } from 'react'
-import { MenuOption } from '../utils/types'
+import { MenuOption } from '../types/types'
 import classNames from 'classnames'
-import { useKeyClick } from '../utils/hooks'
+import useKeyClick from '../hooks/useKeyClick'
 
 type Props = {
     options: { label: MenuOption; onChosen: () => void }[]

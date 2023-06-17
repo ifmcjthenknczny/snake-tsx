@@ -1,29 +1,39 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { CONTROL_KEYS, OPPOSITE_DIRECTIONS, STARTING_DIRECTION, STARTING_HEAD_POSITION, STARTING_MINE, NEW_MINE_DISTANCE_FROM_HEAD, MENU_KEY } from '../utils/consts';
-import { generateStartingSnakeTail, nextHeadPosition, randomAvailableCoords, isEatingApple, isGameOver, findCellsInRadius, pointsForEatingApple } from '../utils/helpers';
+import { CONTROL_KEYS, MENU_KEY } from '../constants/keys';
+import { OPPOSITE_DIRECTIONS, STARTING_DIRECTION, STARTING_HEAD_POSITION, NEW_MINE_DISTANCE_FROM_HEAD } from '../constants/rules';
+import { generateRandomAvailableCoords, findCellsInRadius } from '../helpers/board';
+import { generateStartingSnakeTailCoords, findNextHeadPosition, isEatingApple, isGameOver } from '../helpers/game';
+import { calculatePointsForEatingApple } from '../helpers/score';
 import '../styles/Game.css';
-import { Coords, Key, OptionsWithValue } from '../utils/types';
+import { Coords, Key } from '../types/types';
 import Grid from './Grid';
 import Score from './Score';
-import { GameOverReason } from '../utils/types';
-import { useKeyClick } from '../utils/hooks';
+import useKeyClick from '../hooks/useKeyClick';
+import { SettingsWithValue } from '../types/types';
+import { SETTINGS } from '../constants/settings';
+import { useDispatch } from 'react-redux';
+import { setLastGameOverReason } from '../redux/slices';
+import { useSelector } from '../redux/hooks';
+import { calculateRealSettingValue } from '../helpers/settings';
 
 type Props = {
-    onGameOver: (score: number, reason: GameOverReason) => void;
+    onGameOver: (score: number) => void;
     handleMenu: () => void;
-    settings: OptionsWithValue
 }
 
-const Game = ({ onGameOver, handleMenu, settings }: Props) => {
+const Game = ({ onGameOver, handleMenu }: Props) => {
+    const { settings: settingsChosenValues } = useSelector()
+    const dispatch = useDispatch()
+    const settings = SETTINGS.reduce((acc, optionName) => ({ ...acc, [optionName]: calculateRealSettingValue(optionName, settingsChosenValues[optionName]) }), {} as SettingsWithValue)
     const [moveRefresh, setMovesRefresh] = useState(settings.STARTING_MOVE_REFRESH_MS as number);
     const [headCoords, setHeadCoords] = useState<Coords>(STARTING_HEAD_POSITION)
-    const [tailCoords, setTailCoords] = useState<Coords[]>(generateStartingSnakeTail(settings.STARTING_LENGTH as number, STARTING_HEAD_POSITION, STARTING_DIRECTION))
+    const [tailCoords, setTailCoords] = useState<Coords[]>(generateStartingSnakeTailCoords(settings.STARTING_LENGTH as number, STARTING_HEAD_POSITION, STARTING_DIRECTION))
 
     const [, setApplesEaten] = useState(0);
-    const [appleCoords, setAppleCoords] = useState(randomAvailableCoords([headCoords, ...tailCoords]));
+    const [appleCoords, setAppleCoords] = useState(generateRandomAvailableCoords([headCoords, ...tailCoords]));
     const [points, setPoints] = useState(0)
 
-    const [mineCoords, setMineCoords] = useState<Coords[]>(STARTING_MINE ? [randomAvailableCoords([headCoords, ...tailCoords, appleCoords])] : [])
+    const [mineCoords, setMineCoords] = useState<Coords[]>([generateRandomAvailableCoords([headCoords, ...tailCoords, appleCoords])])
 
     const keyRef = useRef(STARTING_DIRECTION)
     const forbiddenDirectionRef = useRef<string | null>(null)
@@ -32,9 +42,10 @@ const Game = ({ onGameOver, handleMenu, settings }: Props) => {
 
     const gameIteration = () => {
         snakeMoveIteration()
-        const gameOver = isGameOver(headCoords, tailCoords, mineCoords, settings.WALLS as boolean)
-        if (gameOver) {
-            onGameOver(points, gameOver)
+        const gameOverReason = isGameOver(headCoords, tailCoords, mineCoords, settings.WALLS as boolean)
+        if (gameOverReason) {
+            onGameOver(points)
+            dispatch(setLastGameOverReason(gameOverReason))
         }
         if (isEatingApple(headCoords, appleCoords)) {
             eatApple()
@@ -82,7 +93,7 @@ const Game = ({ onGameOver, handleMenu, settings }: Props) => {
 
     const deployNewMine = () => {
         const cellsNearHead = NEW_MINE_DISTANCE_FROM_HEAD ? findCellsInRadius(NEW_MINE_DISTANCE_FROM_HEAD, lastHeadPositionRef.current, settings.WALLS as boolean) : []
-        setMineCoords(prev => [...prev, randomAvailableCoords([appleCoords, headCoords, ...tailCoords, ...cellsNearHead])])
+        setMineCoords(prev => [...prev, generateRandomAvailableCoords([appleCoords, headCoords, ...tailCoords, ...cellsNearHead])])
     }
 
     const snakeMoveIteration = () => {
@@ -93,7 +104,7 @@ const Game = ({ onGameOver, handleMenu, settings }: Props) => {
     }
 
     const moveHead = () => {
-        setHeadCoords(prev => nextHeadPosition(prev, keyRef.current, settings.WALLS as boolean))
+        setHeadCoords(prev => findNextHeadPosition(prev, keyRef.current, settings.WALLS as boolean))
     }
 
     const moveTail = () => {
@@ -106,11 +117,11 @@ const Game = ({ onGameOver, handleMenu, settings }: Props) => {
             return prev + 1
         })
         placeNewApple()
-        setPoints((prev) => prev + pointsForEatingApple(tailCoords.length + 1, moveRefresh, mineCoords.length))
+        setPoints((prev) => prev + calculatePointsForEatingApple(tailCoords.length + 1, moveRefresh, mineCoords.length))
     }
 
     const placeNewApple = () => {
-        setAppleCoords(randomAvailableCoords([headCoords, ...tailCoords, ...mineCoords, appleCoords]))
+        setAppleCoords(generateRandomAvailableCoords([headCoords, ...tailCoords, ...mineCoords, appleCoords]))
     }
 
     const speedUpSnake = () => {

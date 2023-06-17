@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-export const useKeyClick = (onKeyDown?: (e: KeyboardEvent) => void, onKeyUp?: (e: KeyboardEvent) => void) => {
+const useKeyClick = (onKeyDown?: (e: KeyboardEvent) => void, onKeyUp?: (e: KeyboardEvent) => void) => {
     useEffect(() => {
         if (onKeyUp) {
         document.addEventListener('keyup', onKeyUp)
@@ -17,3 +17,5 @@ export const useKeyClick = (onKeyDown?: (e: KeyboardEvent) => void, onKeyUp?: (e
         }
     }, []) //eslint-disable-line react-hooks/exhaustive-deps
 }
+
+export default useKeyClick

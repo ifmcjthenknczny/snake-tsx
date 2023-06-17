@@ -1,17 +1,16 @@
 import React, { useEffect, useRef, useState } from "react"
-import { LOCAL_STORAGE_HIGH_SCORE_NAME, SETTINGS_DEFAULTS, OPTIONS } from "../utils/consts"
+import { LOCAL_STORAGE_HIGH_SCORE_NAME } from "../constants/score"
 import Game from "./Game"
 import GameOver from "./GameOver"
 import Menu from "./Menu"
 import Settings from './Settings'
 import '../styles/App.css'
-import { OptionsWithValue, GameState, GameOverReason, MenuOption } from "../utils/types"
-import { calculateRealOptionValue } from "../utils/helpers"
+import { GameState, MenuOption } from "../types/types"
+import { Provider } from "react-redux"
+import store from "../redux/store"
 
 const App = () => {
     const [gameState, setGameState] = useState<GameState>('menu')
-    const [settings, setSettings] = useState<OptionsWithValue>(SETTINGS_DEFAULTS)
-    const [gameOverReason, setGameOverReason] = useState<GameOverReason>()
     const localScore = useRef(0)
     const highScore = useRef("0")
 
@@ -34,8 +33,7 @@ const App = () => {
         setGameState('menu')
     }
 
-    const handleGameOver = (score: number, reason: GameOverReason) => {
-        setGameOverReason(reason)
+    const handleGameOver = (score: number) => {
         setGameState('gameOver')
         localScore.current = score
         if (score > +highScore.current) {
@@ -56,13 +54,15 @@ const App = () => {
     ]
 
     return (
-        <div className="App">
-            {gameState === 'gameOver' &&
-                <GameOver score={localScore.current} highScore={+highScore.current} onNewGame={handleNewGame} onMenu={handleMenu} reason={gameOverReason} />}
-            {gameState === 'playing' && <Game onGameOver={handleGameOver} handleMenu={handleMenu} settings={OPTIONS.reduce((acc, optionName) => ({ ...acc, [optionName]: calculateRealOptionValue(optionName, settings[optionName]) }), {} as OptionsWithValue)} />}
-            {gameState === 'menu' && <Menu options={MENU_OPTIONS} />}
-            {gameState === 'settings' && <Settings onGoBack={handleMenu} setSettings={setSettings} settings={settings} />}
-        </div>
+        <Provider store={store}>
+            <div className="App">
+                {gameState === 'gameOver' &&
+                    <GameOver score={localScore.current} highScore={+highScore.current} onNewGame={handleNewGame} onMenu={handleMenu} />}
+                {gameState === 'playing' && <Game onGameOver={handleGameOver} handleMenu={handleMenu} />}
+                {gameState === 'menu' && <Menu options={MENU_OPTIONS} />}
+                {gameState === 'settings' && <Settings onGoBack={handleMenu} />}
+            </div>
+        </Provider>
     )
 }
 

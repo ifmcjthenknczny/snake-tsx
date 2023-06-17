@@ -1,4 +1,5 @@
-import { GAME_OVER_REASONS, OPTIONS } from "./consts";
+import { GAME_OVER_REASONS } from "../constants/rules";
+import { SETTINGS } from "../constants/settings";
 
 export type CellColor = "green" | "red" | "blue" | "darkgray" | "black";
 
@@ -11,9 +12,9 @@ export type Element = "apple" | "empty" | "head" | "tail" | "mine";
 
 export type Key = "ArrowLeft" | "ArrowRight" | "ArrowUp" | "ArrowDown";
 
-export type OptionName = (typeof OPTIONS)[number];
+export type SettingName = (typeof SETTINGS)[number];
 
-export type OptionProp = {
+export type SettingProperties = {
   min: number | boolean;
   max: number | boolean;
   defaultValue: number | boolean;
@@ -23,13 +24,16 @@ export type OptionProp = {
   label: string;
   inverselyProportional?: true;
   isBoolean?: true;
-  dependsOn?: OptionName[];
+  dependsOn?: SettingName[];
   isDecimal?: true;
 };
-export type OptionsWithValue = Record<OptionName, OptionProp["defaultValue"]>;
+export type SettingsWithValue = Record<
+  SettingName,
+  SettingProperties["defaultValue"]
+>;
 
 export type GameState = "menu" | "settings" | "gameOver" | "playing";
 
 export type GameOverReason = (typeof GAME_OVER_REASONS)[number];
 
-export type MenuOption = 'NEW GAME' | 'SETTINGS'
+export type MenuOption = "NEW GAME" | "SETTINGS";
