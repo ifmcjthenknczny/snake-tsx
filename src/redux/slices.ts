@@ -40,6 +40,10 @@ const appSlice = createSlice({
     increaseScore: (state, action: PayloadAction<number>) => {
       state.score += action.payload;
     },
+    setNewGame: (state) => {
+      state.gameState = "playing";
+      state.score = 0;
+    },
     setGameState: (state, action: PayloadAction<GameState>) => {
       state.gameState = action.payload;
     },
@@ -56,6 +60,7 @@ export const {
   setLastGameOverReason,
   increaseScore,
   setGameState,
+  setNewGame,
 } = appSlice.actions;
 
 export default appSlice.reducer;

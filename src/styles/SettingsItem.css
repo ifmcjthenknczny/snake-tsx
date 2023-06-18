@@ -1,19 +1,19 @@
-.SettingOption__label {
+.SettingsItem__label {
   text-align: left;
 }
 
-.SettingOption {
+.SettingsItem {
   display: grid;
   width: 700px;
   grid-template-columns: auto 180px 80px;
   column-gap: 10px;
 }
 
-.SettingOption__dependent {
+.SettingsItem__dependent {
   margin-left: 20px;
 }
 
-.SettingOption__value {
+.SettingsItem__value {
   text-align: right;
 }
 

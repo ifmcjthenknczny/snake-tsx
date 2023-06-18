@@ -1,6 +1,6 @@
 import { SettingName } from "../types/types"
 import { SETTINGS_PROPERTIES } from "../constants/settings"
-import '../styles/SettingOption.css'
+import '../styles/SettingsItem.css'
 import { useState } from "react"
 import classNames from "classnames"
 import React, { useEffect } from 'react'
@@ -10,44 +10,38 @@ import { useSelector } from "../redux/hooks"
 
 type Props = {
     name: SettingName
-    startingValue: number | boolean
 }
 
-const SettingOption = ({ name, startingValue }: Props) => {
+const SettingsItem = ({ name }: Props) => {
+    const { settings } = useSelector()
     const { min, max, step, label, isBoolean, isDecimal } = SETTINGS_PROPERTIES[name]
-    const [value, setValue] = useState<number | boolean>(startingValue)
-    const [valueLabel, setValueLabel] = useState<string>(toValueLabel(startingValue))
+    const [valueLabel, setValueLabel] = useState<string>(toValueLabel(settings[name]))
     const dispatch = useDispatch()
 
     useEffect(() => {
-        setValueLabel(toValueLabel(value, isDecimal))
-    }, [value]) //eslint-disable-line react-hooks/exhaustive-deps
+        setValueLabel(toValueLabel(settings[name], isDecimal))
+    }, [settings[name]]) //eslint-disable-line react-hooks/exhaustive-deps
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!isBoolean) {
-            setValue(+e.target.value)
-        }
         dispatch(updateSetting({ [name]: isBoolean ? !!+e.target.value : +e.target.value }))
     }
 
     const handleClick = () => {
         if (isBoolean) {
-            setValue(prevValue => !prevValue)
             dispatch(toggleSetting(name))
         }
     }
 
     const handleDoubleClick = () => {
-        setValue(SETTINGS_PROPERTIES[name].defaultValue)
         dispatch(updateSetting({ [name]: SETTINGS_PROPERTIES[name].defaultValue }))
     }
 
     return (
-        <div className="SettingOption">
-            <label className={classNames("SettingOption__label", SETTINGS_PROPERTIES[name].dependsOn && "SettingOption__dependent")} htmlFor={name}>{label}</label>
-            <input className="SettingOption__input" type="range" value={+value} min={+min} max={+max} step={+step} onChange={handleChange} onClick={handleClick} onDoubleClick={handleDoubleClick} />
-            <div className="SettingOption__value">{valueLabel}</div>
+        <div className="SettingsItem">
+            <label className={classNames("SettingsItem__label", SETTINGS_PROPERTIES[name].dependsOn && "SettingsItem__dependent")} htmlFor={name}>{label}</label>
+            <input className="SettingsItem__input" type="range" value={+settings[name]} min={+min} max={+max} step={+step} onChange={handleChange} onClick={handleClick} onDoubleClick={handleDoubleClick} />
+            <div className="SettingsItem__value">{valueLabel}</div>
         </div>)
 }
 
@@ -61,4 +55,4 @@ const toValueLabel = (value: number | boolean, isDecimal?: true) => {
     return `${value}`
 }
 
-export default SettingOption
+export default SettingsItem

@@ -1,16 +1,19 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef } from "react"
 import { LOCAL_STORAGE_HIGH_SCORE_NAME } from "../constants/score"
 import Game from "./Game"
 import GameOver from "./GameOver"
 import Menu from "./Menu"
 import Settings from './Settings'
 import '../styles/App.css'
-import { GameState, MenuOption } from "../types/types"
-import { Provider } from "react-redux"
-import store from "../redux/store"
+import { MenuOption } from "../types/types"
+import { useSelector } from "../redux/hooks"
+import { useDispatch } from "react-redux"
+import { setNewGame, setGameState } from "../redux/slices"
+import useLocalStorage from "../hooks/useLocalStorage"
 
 const App = () => {
-    const [gameState, setGameState] = useState<GameState>('menu')
+    const { gameState } = useSelector()
+    const dispatch = useDispatch()
     const localScore = useRef(0)
     const highScore = useRef("0")
 
@@ -21,20 +24,7 @@ const App = () => {
         }
     }, [])
 
-    const handleNewGame = () => {
-        setGameState('playing')
-    }
-
-    const handleSettings = () => {
-        setGameState('settings')
-    }
-
-    const handleMenu = () => {
-        setGameState('menu')
-    }
-
     const handleGameOver = (score: number) => {
-        setGameState('gameOver')
         localScore.current = score
         if (score > +highScore.current) {
             localStorage.setItem(LOCAL_STORAGE_HIGH_SCORE_NAME, `${score}`)
@@ -45,24 +35,22 @@ const App = () => {
     const MENU_OPTIONS: { label: MenuOption; onChosen: () => void }[] = [
         {
             label: "NEW GAME",
-            onChosen: handleNewGame
+            onChosen: () => dispatch(setNewGame())
         },
         {
             label: "SETTINGS",
-            onChosen: handleSettings
+            onChosen: () => dispatch(setGameState('settings'))
         }
     ]
 
     return (
-        <Provider store={store}>
             <div className="App">
                 {gameState === 'gameOver' &&
-                    <GameOver score={localScore.current} highScore={+highScore.current} onNewGame={handleNewGame} onMenu={handleMenu} />}
-                {gameState === 'playing' && <Game onGameOver={handleGameOver} handleMenu={handleMenu} />}
+                    <GameOver score={localScore.current} highScore={+highScore.current} />}
+                {gameState === 'playing' && <Game onGameOver={handleGameOver} />}
                 {gameState === 'menu' && <Menu options={MENU_OPTIONS} />}
-                {gameState === 'settings' && <Settings onGoBack={handleMenu} />}
+                {gameState === 'settings' && <Settings />}
             </div>
-        </Provider>
     )
 }
 

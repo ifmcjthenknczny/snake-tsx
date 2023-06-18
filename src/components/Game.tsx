@@ -12,17 +12,16 @@ import useKeyClick from '../hooks/useKeyClick';
 import { SettingsWithValue } from '../types/types';
 import { SETTINGS } from '../constants/settings';
 import { useDispatch } from 'react-redux';
-import { setLastGameOverReason } from '../redux/slices';
+import { increaseScore, setGameState, setLastGameOverReason } from '../redux/slices';
 import { useSelector } from '../redux/hooks';
 import { calculateRealSettingValue } from '../helpers/settings';
 
 type Props = {
     onGameOver: (score: number) => void;
-    handleMenu: () => void;
 }
 
-const Game = ({ onGameOver, handleMenu }: Props) => {
-    const { settings: settingsChosenValues } = useSelector()
+const Game = ({ onGameOver }: Props) => {
+    const { score, settings: settingsChosenValues } = useSelector()
     const dispatch = useDispatch()
     const settings = SETTINGS.reduce((acc, optionName) => ({ ...acc, [optionName]: calculateRealSettingValue(optionName, settingsChosenValues[optionName]) }), {} as SettingsWithValue)
     const [moveRefresh, setMovesRefresh] = useState(settings.STARTING_MOVE_REFRESH_MS as number);
@@ -31,9 +30,8 @@ const Game = ({ onGameOver, handleMenu }: Props) => {
 
     const [, setApplesEaten] = useState(0);
     const [appleCoords, setAppleCoords] = useState(generateRandomAvailableCoords([headCoords, ...tailCoords]));
-    const [points, setPoints] = useState(0)
 
-    const [mineCoords, setMineCoords] = useState<Coords[]>([generateRandomAvailableCoords([headCoords, ...tailCoords, appleCoords])])
+    const [mineCoords, setMineCoords] = useState<Coords[]>([])
 
     const keyRef = useRef(STARTING_DIRECTION)
     const forbiddenDirectionRef = useRef<string | null>(null)
@@ -44,8 +42,9 @@ const Game = ({ onGameOver, handleMenu }: Props) => {
         snakeMoveIteration()
         const gameOverReason = isGameOver(headCoords, tailCoords, mineCoords, settings.WALLS as boolean)
         if (gameOverReason) {
-            onGameOver(points)
+            onGameOver(score)
             dispatch(setLastGameOverReason(gameOverReason))
+            dispatch(setGameState('gameOver'))
         }
         if (isEatingApple(headCoords, appleCoords)) {
             eatApple()
@@ -72,7 +71,7 @@ const Game = ({ onGameOver, handleMenu }: Props) => {
             setLastKey(e.key as Key)
         }
         else if (e.key === MENU_KEY) {
-            handleMenu()
+            dispatch(setGameState('menu'))
         }
     }
 
@@ -117,7 +116,7 @@ const Game = ({ onGameOver, handleMenu }: Props) => {
             return prev + 1
         })
         placeNewApple()
-        setPoints((prev) => prev + calculatePointsForEatingApple(tailCoords.length + 1, moveRefresh, mineCoords.length))
+        dispatch(increaseScore(calculatePointsForEatingApple(tailCoords.length + 1, moveRefresh, mineCoords.length)))
     }
 
     const placeNewApple = () => {
@@ -130,7 +129,7 @@ const Game = ({ onGameOver, handleMenu }: Props) => {
 
     return (
         <div className="Game">
-            <Score score={points} />
+            <Score score={score} />
             <Grid apple={appleCoords} snakeHead={headCoords} snakeTail={tailCoords} mines={mineCoords} isWalls={settings.WALLS as boolean} />
         </div>
     )
