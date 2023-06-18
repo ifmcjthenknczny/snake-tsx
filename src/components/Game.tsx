@@ -12,15 +12,12 @@ import useKeyClick from '../hooks/useKeyClick';
 import { SettingsWithValue } from '../types/types';
 import { SETTINGS } from '../constants/settings';
 import { useDispatch } from 'react-redux';
-import { increaseScore, setGameState, setLastGameOverReason } from '../redux/slices';
+import { increaseScore, setGameState, setGameOver } from '../redux/slices';
 import { useSelector } from '../redux/hooks';
 import { calculateRealSettingValue } from '../helpers/settings';
+import useHighScore from '../hooks/useHighScore';
 
-type Props = {
-    onGameOver: (score: number) => void;
-}
-
-const Game = ({ onGameOver }: Props) => {
+const Game = () => {
     const { score, settings: settingsChosenValues } = useSelector()
     const dispatch = useDispatch()
     const settings = SETTINGS.reduce((acc, optionName) => ({ ...acc, [optionName]: calculateRealSettingValue(optionName, settingsChosenValues[optionName]) }), {} as SettingsWithValue)
@@ -37,14 +34,15 @@ const Game = ({ onGameOver }: Props) => {
     const forbiddenDirectionRef = useRef<string | null>(null)
     const lastHeadPositionRef = useRef<Coords>(headCoords)
     const keyFired = useRef(false)
+    const [, maybeSetHighScore] = useHighScore()
 
     const gameIteration = () => {
         snakeMoveIteration()
         const gameOverReason = isGameOver(headCoords, tailCoords, mineCoords, settings.WALLS as boolean)
         if (gameOverReason) {
-            onGameOver(score)
-            dispatch(setLastGameOverReason(gameOverReason))
-            dispatch(setGameState('gameOver'))
+            maybeSetHighScore(score)
+            dispatch(setGameOver(gameOverReason))
+
         }
         if (isEatingApple(headCoords, appleCoords)) {
             eatApple()
