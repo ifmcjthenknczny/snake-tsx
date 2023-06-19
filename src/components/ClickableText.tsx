@@ -1,4 +1,4 @@
-import '../styles/ClickableText.css'
+import styles from '../styles/ClickableText.module.scss'
 import classNames from 'classnames'
 import React from 'react'
 
@@ -8,6 +8,6 @@ type Props = {
     className?: string
 }
 
-const ClickableText = ({text, onClick, className}: Props) => <button className={classNames(`ClickableText`, className)} onClick={onClick}>{text}</button>
+const ClickableText = ({text, onClick, className}: Props) => <button className={classNames(styles.clickableText, className)} onClick={onClick}>{text}</button>
 
 export default ClickableText

@@ -1,5 +1,4 @@
-.Menu {
-    font-family: 'Press Start 2P', cursive;
+.settings {
     text-align: center;
     top: 5vmin;
     display: flex;
@@ -11,18 +10,8 @@
     height: 100%;
 }
 
-.Menu__options {
+.list {
     padding: 1em;
     display: flex;
     flex-direction: column;
-}
-
-.Menu__credits {
-    font-size: 8px;
-}
-
-.Menu__focused {
-    color: red;
-    cursor: pointer;
-    transition: color .5s;
 }

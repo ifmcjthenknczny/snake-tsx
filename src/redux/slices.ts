@@ -1,7 +1,8 @@
-import { GameState } from "./../types/types";
+import { GameState, SettingName, SettingValue } from "./../types/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SETTINGS_DEFAULTS } from "../constants/settings";
 import { GameOverReason, SettingsWithValue } from "../types/types";
+import { calculateRealSettingValue } from "../helpers/settings";
 
 type AppState = {
   settings: SettingsWithValue;
@@ -23,16 +24,30 @@ const appSlice = createSlice({
   reducers: {
     updateSetting: (
       state,
-      action: PayloadAction<Partial<AppState["settings"]>>
+      action: PayloadAction<{
+        settingName: SettingName;
+        settingValue: SettingValue;
+      }>
     ) => {
-      state.settings = { ...state.settings, ...action.payload };
+      const { settingName, settingValue } = action.payload;
+      state.settings = {
+        ...state.settings,
+        ...{
+          [settingName]: {
+            relative: settingValue,
+            real: calculateRealSettingValue(settingName, settingValue),
+          },
+        },
+      };
     },
-    toggleSetting: (
+    toggleBooleanSetting: (
       state,
       settingName: PayloadAction<keyof AppState["settings"]>
     ) => {
-      state.settings[settingName.payload] =
-        !state.settings[settingName.payload];
+      state.settings[settingName.payload] = {
+        relative: !state.settings[settingName.payload].relative,
+        real: !state.settings[settingName.payload].real
+      };
     },
     setLastGameOverReason: (state, action: PayloadAction<GameOverReason>) => {
       state.lastGameOverReason = action.payload;
@@ -51,6 +66,9 @@ const appSlice = createSlice({
     setGameState: (state, action: PayloadAction<GameState>) => {
       state.gameState = action.payload;
     },
+    goToMenu: (state) => {
+      state.gameState = 'menu'
+    }
   },
 });
 
@@ -59,13 +77,14 @@ export type RootState = {
 };
 
 export const {
-  toggleSetting,
+  toggleBooleanSetting,
   updateSetting,
   setLastGameOverReason,
   increaseScore,
   setGameState,
   setNewGame,
   setGameOver,
+  goToMenu,
 } = appSlice.actions;
 
 export default appSlice.reducer;

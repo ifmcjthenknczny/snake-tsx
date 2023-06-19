@@ -1,3 +1,4 @@
+import { calculateRealSettingValue } from "../helpers/settings";
 import {
   SettingProperties,
   SettingName,
@@ -5,11 +6,11 @@ import {
 } from "../types/types";
 
 export const SETTINGS = [
+  "WALLS",
   "STARTING_MOVE_REFRESH_MS",
   "STARTING_LENGTH",
   "SNAKE_SPEED_MULTIPLIER",
   "APPLES_TO_SPEED_UP_SNAKE",
-  "WALLS",
   "NEW_MINE_INTERVAL_MS",
 ] as const;
 
@@ -17,7 +18,7 @@ export const SETTINGS_PROPERTIES: Record<SettingName, SettingProperties> = {
   STARTING_MOVE_REFRESH_MS: {
     min: 1,
     max: 10,
-    defaultValue: 3,
+    defaultValue: 4,
     step: 1,
     realMin: 100,
     realMax: 800,
@@ -67,9 +68,12 @@ export const SETTINGS_PROPERTIES: Record<SettingName, SettingProperties> = {
 };
 
 export const SETTINGS_DEFAULTS = Object.keys(SETTINGS_PROPERTIES).reduce(
-  (acc, option) => ({
+  (acc, settingName) => ({
     ...acc,
-    [option]: SETTINGS_PROPERTIES[option].defaultValue,
+    [settingName]: {
+      relative: SETTINGS_PROPERTIES[settingName].defaultValue,
+      real: calculateRealSettingValue(settingName as SettingName, SETTINGS_PROPERTIES[settingName].defaultValue)
+    }
   }),
   {} as SettingsWithValue
 );

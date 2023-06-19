@@ -3,11 +3,12 @@ import Game from "./Game"
 import GameOver from "./GameOver"
 import Menu from "./Menu"
 import Settings from './Settings'
-import '../styles/App.css'
+import styles from '../styles/App.module.scss'
 import { MenuOption } from "../types/types"
 import { useSelector } from "../redux/hooks"
 import { useDispatch } from "react-redux"
 import { setNewGame, setGameState } from "../redux/slices"
+import Help from "./Help"
 
 const App = () => {
     const { gameState } = useSelector()
@@ -21,17 +22,22 @@ const App = () => {
         {
             label: "SETTINGS",
             onChosen: () => dispatch(setGameState('settings'))
+        },
+        {
+            label: "INSTRUCTIONS",
+            onChosen: () => dispatch(setGameState('help'))
         }
     ]
 
     return (
-            <div className="App">
-                {gameState === 'gameOver' &&
-                    <GameOver />}
-                {gameState === 'playing' && <Game />}
-                {gameState === 'menu' && <Menu options={MENU_OPTIONS} />}
-                {gameState === 'settings' && <Settings />}
-            </div>
+        <div className={styles.app}>
+            {gameState === 'gameOver' &&
+                <GameOver />}
+            {gameState === 'playing' && <Game />}
+            {gameState === 'menu' && <Menu options={MENU_OPTIONS} />}
+            {gameState === 'settings' && <Settings />}
+            {gameState === 'help' && <Help />}
+        </div>
     )
 }
 

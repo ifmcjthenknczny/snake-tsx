@@ -1,4 +1,4 @@
-import '../styles/GameOver.css'
+import styles from '../styles/GameOver.module.scss'
 import ClickableText from './ClickableText'
 import React from 'react'
 import { useSelector } from '../redux/hooks'
@@ -20,18 +20,18 @@ const LABELS = {
 
 const GameOver = () => {
     const { lastGameOverReason: reason, score } = useSelector()
-    const [highScore, ] = useHighScore()
+    const [highScore,] = useHighScore()
     const dispatch = useDispatch()
 
-    return <div className="GameOver">
-        <div className="GameOver__wrapper">
-            <h1 className="GameOver__title">{LABELS.title}</h1>
+    return <div className={styles.gameOver}>
+        <div className={styles.wrapper}>
+            <h1 className={styles.title}>{LABELS.title}</h1>
             <h6>{GAME_OVER_LABELS[reason]}!</h6>
             <h5>{LABELS.score} {score}</h5>
             {highScore > score ? <h6>{LABELS.highScore} {highScore}</h6> : <h6>{LABELS.newHighScore}</h6>}
-            <div className="GameOver__options">
-                <ClickableText className="GameOver__again" text={LABELS.again} onClick={() => dispatch(setNewGame())} />
-                <ClickableText className="GameOver__settings" text={LABELS.menu} onClick={() => dispatch(setGameState('settings'))} />
+            <div className={styles.options}>
+                <ClickableText className={styles.again} text={LABELS.again} onClick={() => dispatch(setNewGame())} />
+                <ClickableText className={styles.settings} text={LABELS.menu} onClick={() => dispatch(setGameState('settings'))} />
             </div>
         </div>
     </div>

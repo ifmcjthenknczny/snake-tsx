@@ -1,8 +1,7 @@
-import '../styles/Logo.css'
+import styles from '../styles/Logo.module.scss'
 import React from 'react'
+import { GAME_TITLE } from '../constants/labels'
 
-const GAME_TITLE = "SSNAKE"
-
-const Logo = () => <div className="Logo">{GAME_TITLE}</div>
+const Logo = () => <div className={styles.logo}>{GAME_TITLE}</div>
 
 export default Logo

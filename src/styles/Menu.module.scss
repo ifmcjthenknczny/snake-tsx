@@ -1,0 +1,27 @@
+.menu {
+    text-align: center;
+    top: 5vmin;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.options {
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+}
+
+.credits {
+    font-size: 8px;
+}
+
+.focused {
+    color: red;
+    cursor: pointer;
+    transition: color .5s;
+}

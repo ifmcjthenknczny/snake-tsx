@@ -1,11 +1,11 @@
 import { SettingName } from "../types/types"
 import { SETTINGS_PROPERTIES } from "../constants/settings"
-import '../styles/SettingsItem.css'
+import styles from '../styles/SettingsItem.module.scss'
 import { useState } from "react"
 import classNames from "classnames"
 import React, { useEffect } from 'react'
 import { useDispatch } from "react-redux"
-import { toggleSetting, updateSetting } from "../redux/slices"
+import { toggleBooleanSetting, updateSetting } from "../redux/slices"
 import { useSelector } from "../redux/hooks"
 
 type Props = {
@@ -15,33 +15,33 @@ type Props = {
 const SettingsItem = ({ name }: Props) => {
     const { settings } = useSelector()
     const { min, max, step, label, isBoolean, isDecimal } = SETTINGS_PROPERTIES[name]
-    const [valueLabel, setValueLabel] = useState<string>(toValueLabel(settings[name]))
+    const [valueLabel, setValueLabel] = useState<string>(toValueLabel(settings[name].relative))
     const dispatch = useDispatch()
 
     useEffect(() => {
-        setValueLabel(toValueLabel(settings[name], isDecimal))
+        setValueLabel(toValueLabel(settings[name].relative, isDecimal))
     }, [settings[name]]) //eslint-disable-line react-hooks/exhaustive-deps
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(updateSetting({ [name]: isBoolean ? !!+e.target.value : +e.target.value }))
+        dispatch(updateSetting({ settingName: name, settingValue: isBoolean ? !!+e.target.value : +e.target.value }))
     }
 
     const handleClick = () => {
         if (isBoolean) {
-            dispatch(toggleSetting(name))
+            dispatch(toggleBooleanSetting(name))
         }
     }
 
     const handleDoubleClick = () => {
-        dispatch(updateSetting({ [name]: SETTINGS_PROPERTIES[name].defaultValue }))
+        dispatch(updateSetting({ settingName: name, settingValue: SETTINGS_PROPERTIES[name].defaultValue }))
     }
 
     return (
-        <div className="SettingsItem">
-            <label className={classNames("SettingsItem__label", SETTINGS_PROPERTIES[name].dependsOn && "SettingsItem__dependent")} htmlFor={name}>{label}</label>
-            <input className="SettingsItem__input" type="range" value={+settings[name]} min={+min} max={+max} step={+step} onChange={handleChange} onClick={handleClick} onDoubleClick={handleDoubleClick} />
-            <div className="SettingsItem__value">{valueLabel}</div>
+        <div className={styles.item}>
+            <label className={classNames(styles.label, SETTINGS_PROPERTIES[name].dependsOn && styles.dependent)} htmlFor={name}>{label}</label>
+            <input className={styles.input} type="range" value={+settings[name].relative} min={+min} max={+max} step={+step} onChange={handleChange} onClick={handleClick} onDoubleClick={handleDoubleClick} />
+            <div className={styles.value}>{valueLabel}</div>
         </div>)
 }
 

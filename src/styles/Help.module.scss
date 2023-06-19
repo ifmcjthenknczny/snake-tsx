@@ -1,5 +1,4 @@
-.Settings {
-    font-family: 'Press Start 2P', cursive;
+.info {
     text-align: center;
     top: 5vmin;
     display: flex;
@@ -11,8 +10,24 @@
     height: 100%;
 }
 
-.Settings__options {
+.content {
+    width: 50%;
+}
+
+.list {
     padding: 1em;
     display: flex;
     flex-direction: column;
+}
+
+.element {
+    padding: 0;
+    margin: 0.3em 0 0.3em;
+    text-align: justify;
+    font-size: 12px;
+}
+
+.bait {
+    font-size: 14px;
+    padding-bottom: 1em;
 }

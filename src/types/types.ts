@@ -14,10 +14,12 @@ export type Key = "ArrowLeft" | "ArrowRight" | "ArrowUp" | "ArrowDown";
 
 export type SettingName = (typeof SETTINGS)[number];
 
+export type SettingValue = number | boolean;
+
 export type SettingProperties = {
-  min: number | boolean;
-  max: number | boolean;
-  defaultValue: number | boolean;
+  min: SettingValue;
+  max: SettingValue;
+  defaultValue: SettingValue;
   step?: number;
   realMin?: number;
   realMax?: number;
@@ -29,11 +31,11 @@ export type SettingProperties = {
 };
 export type SettingsWithValue = Record<
   SettingName,
-  SettingProperties["defaultValue"]
+  { relative: SettingValue; real: SettingValue }
 >;
 
-export type GameState = "menu" | "settings" | "gameOver" | "playing";
+export type GameState = "menu" | "settings" | "gameOver" | "playing" | "help";
 
 export type GameOverReason = (typeof GAME_OVER_REASONS)[number];
 
-export type MenuOption = "NEW GAME" | "SETTINGS";
+export type MenuOption = "NEW GAME" | "SETTINGS" | "INSTRUCTIONS";

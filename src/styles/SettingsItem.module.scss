@@ -1,0 +1,35 @@
+.label {
+  text-align: left;
+}
+
+.item {
+  display: grid;
+  width: 700px;
+  grid-template-columns: auto 180px 80px;
+  column-gap: 10px;
+}
+
+.dependent {
+  margin-left: 20px;
+}
+
+.value {
+  text-align: right;
+}
+
+input[type="range"] {
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track,
+input[type="range"]::-moz-range-track {
+  -webkit-appearance: none;
+  background: blue;
+  height: 0.5rem;
+}
+input[type="range"]::-webkit-slider-thumb,
+input[type="range"]::-moz-range-thumb {
+  background: red;
+  border-radius: 0;
+  border: 2px black solid;
+  -webkit-appearance: none;
+}
