@@ -20,11 +20,13 @@ const SettingsItem = ({ name }: Props) => {
 
     useEffect(() => {
         setValueLabel(toValueLabel(settings[name].relative, isDecimal))
-    }, [settings[name]]) //eslint-disable-line react-hooks/exhaustive-deps
+    }, [settings[name].relative]) //eslint-disable-line react-hooks/exhaustive-deps
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(updateSetting({ settingName: name, settingValue: isBoolean ? !!+e.target.value : +e.target.value }))
+        if (!isBoolean) {
+            dispatch(updateSetting({ settingName: name, settingValue: +e.target.value }))
+        }
     }
 
     const handleClick = () => {

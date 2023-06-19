@@ -7,7 +7,7 @@ import styles from '../styles/Help.module.scss'
 
 const contentLines = [
     "Use the arrow keys on your keyboard to move the snake around the game board",
-    "Use esc to go back to menu",
+    "Click esc anytime to go to menu",
     "The objective of the game is to eat as many apples as possible",
     "Each time the snake eats an apple, it will grow longer",
     "Points given for eating an apple depends on snake's length and speed as well as mines quantity on the board",

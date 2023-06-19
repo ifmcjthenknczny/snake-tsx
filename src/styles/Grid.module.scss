@@ -1,0 +1,9 @@
+.grid {
+    display: grid;
+    background-color: white;
+    grid-column-gap: 0.4vmin;
+    grid-row-gap: 0.4vmin;
+    justify-self: center;
+    align-self: center;
+    cursor: none;
+}
