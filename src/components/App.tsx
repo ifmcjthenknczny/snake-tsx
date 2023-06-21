@@ -4,11 +4,11 @@ import GameOver from "./GameOver"
 import Menu from "./Menu"
 import Settings from './Settings'
 import styles from '../styles/App.module.scss'
-import { MenuOption } from "../types/types"
 import { useSelector } from "../redux/hooks"
 import { useDispatch } from "react-redux"
 import { setNewGame, setGameState } from "../redux/slices"
 import Help from "./Help"
+import { MenuOption } from "../constants/labels"
 
 const App = () => {
     const { gameState } = useSelector()

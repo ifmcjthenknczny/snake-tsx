@@ -11,7 +11,7 @@
 }
 
 .content {
-    width: 40%;
+    width: 35%;
 }
 
 .list {
@@ -30,4 +30,20 @@
 .bait {
     font-size: 14px;
     padding-bottom: 1em;
+}
+
+.controls {
+    font-size: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.control {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.imageWrapper {
+    margin: 20px 0 10px;
 }

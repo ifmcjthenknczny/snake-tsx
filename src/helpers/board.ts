@@ -1,8 +1,9 @@
-import { Coords, Key } from "../types/types";
 import { BOARD_SIZE } from "../constants/board";
 import { randInt, randomElement } from "../utils/random";
 import { rangeExclude } from "../utils/range";
 import { rangeWithModulo } from "../utils/range";
+import { Coords } from "../constants/board";
+import { Key } from "../constants/keys";
 
 export const generateRandomCoords = () => ({
   x: randInt(0, BOARD_SIZE.x),

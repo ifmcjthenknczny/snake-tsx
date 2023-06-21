@@ -1,12 +1,11 @@
-import { SettingName } from "../types/types"
 import { SETTINGS_PROPERTIES } from "../constants/settings"
 import styles from '../styles/SettingsItem.module.scss'
-import { useState } from "react"
 import classNames from "classnames"
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from "react-redux"
 import { toggleBooleanSetting, updateSetting } from "../redux/slices"
 import { useSelector } from "../redux/hooks"
+import { SettingName } from "../constants/settings"
 
 type Props = {
     name: SettingName

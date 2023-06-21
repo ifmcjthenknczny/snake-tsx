@@ -1,7 +1,11 @@
-import {
-  Element,
-  CellColor,
-} from "../types/types";
+export type CellColor = "green" | "red" | "blue" | "darkgray" | "black";
+
+export type Coords = {
+  x: number;
+  y: number;
+};
+
+export type Element = "apple" | "empty" | "head" | "tail" | "mine";
 
 export const BOARD_SIZE = {
   x: 20,

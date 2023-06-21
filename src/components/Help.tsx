@@ -4,17 +4,16 @@ import React from "react"
 import useGoToMenu from "../hooks/useGoToMenu"
 import { GO_BACK_TEXT } from "../constants/labels"
 import styles from '../styles/Help.module.scss'
+import arrowKeys from '../assets/arrowkeys.png'
+import esc from '../assets/esc.png'
 
 const contentLines = [
-    "Use the arrow keys on your keyboard to move the snake around the game board",
-    "Click esc anytime to go to menu",
-    "The objective of the game is to eat as many apples as possible",
-    "Each time the snake eats an apple, it will grow longer",
-    "Points given for eating an apple depends on snake's length and speed as well as mines quantity on the board",
-    "The game ends if the snake runs into the walls, mine or its own body",
+    "The objective of the game is to earn points by eating as many apples as you can",
+    "Amount of points earned is based on the snake's length, speed, and the number of mines on the board",
+    "The game ends if the snake hits a wall, a mine, or its own body."
 ]
 
-const bait = "Try to beat your high score and see how long you can make the snake grow!"
+const bait = "Good luck and only the high scores!"
 
 const Help = () => {
     const onGoBack = useGoToMenu()
@@ -23,6 +22,10 @@ const Help = () => {
         <div className={styles.info}>
             <Logo />
             <div className={styles.content}>
+                <div className={styles.controls}>
+                    <ControlsHelp text="Use the arrow keys on your keyboard to move the snake around the game board" image={arrowKeys} />
+                    <ControlsHelp text="Click escape anytime to go to menu" image={esc} />
+                </div>
                 <li className={styles.list}>
                     {contentLines.map((line, i) => <ul key={i} className={styles.element}>{line}</ul>)}
                 </li>
@@ -34,3 +37,9 @@ const Help = () => {
 }
 
 export default Help
+
+
+const ControlsHelp = ({ image, text }: { image: string; text: string }) => <div className={styles.control}>
+    <div className={styles.imageWrapper}><img src={image} alt={''} /></div>
+    {text}
+</div>

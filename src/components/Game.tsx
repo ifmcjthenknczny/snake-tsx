@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { CONTROL_KEYS } from '../constants/keys';
+import { CONTROL_KEYS, Key } from '../constants/keys';
 import { OPPOSITE_DIRECTIONS, STARTING_DIRECTION, STARTING_HEAD_POSITION, NEW_MINE_DISTANCE_FROM_HEAD } from '../constants/rules';
 import { generateRandomAvailableCoords, findCellsInRadius } from '../helpers/board';
 import { generateStartingSnakeTailCoords, findNextHeadPosition, isEatingApple, isGameOver } from '../helpers/game';
 import { calculatePointsForEatingApple } from '../helpers/score';
 import styles from '../styles/Game.module.scss';
-import { Coords, Key } from '../types/types';
-import Grid from './Grid';
+import Board from './Board';
 import Score from './Score';
 import useKeyClick from '../hooks/useKeyClick';
 import { useDispatch } from 'react-redux';
@@ -14,6 +13,7 @@ import { increaseScore, setGameOver } from '../redux/slices';
 import { useSelector } from '../redux/hooks';
 import useHighScore from '../hooks/useHighScore';
 import useGoToMenu from '../hooks/useGoToMenu';
+import { Coords } from '../constants/board';
 
 const Game = () => {
     const { score, settings } = useSelector()
@@ -123,7 +123,7 @@ const Game = () => {
     return (
         <div className={styles.game}>
             <Score score={score} />
-            <Grid apple={appleCoords} snakeHead={headCoords} snakeTail={tailCoords} mines={mineCoords} isWalls={settings.WALLS.real as boolean} />
+            <Board apple={appleCoords} snakeHead={headCoords} snakeTail={tailCoords} mines={mineCoords} isWalls={settings.WALLS.real as boolean} />
         </div>
     )
 }

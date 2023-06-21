@@ -1,5 +1,4 @@
-import { SettingName } from "../types/types";
-import { SETTINGS_PROPERTIES } from "../constants/settings";
+import { SETTINGS_PROPERTIES, SettingName } from "../constants/settings";
 
 export const calculateRealSettingValue = (
   option: SettingName,

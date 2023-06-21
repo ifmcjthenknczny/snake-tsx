@@ -6,10 +6,10 @@ const BOARD_SIZE_COEFF = (BOARD_SIZE.x * BOARD_SIZE.y) / 400;
 export const calculatePointsForEatingApple = (
   snakeLength: number,
   snakeMoveInterval: number,
-  minesPresent: number
+  minesOnBoard: number
 ) =>
   Math.ceil(
-    (snakeLength + minesPresent * 0.5) *
+    (snakeLength + minesOnBoard * 2) *
       BOARD_SIZE_COEFF *
       Math.min(
         SETTINGS_PROPERTIES.STARTING_MOVE_REFRESH_MS.realMax /

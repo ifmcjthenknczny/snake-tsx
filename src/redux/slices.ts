@@ -1,8 +1,7 @@
-import { GameState, SettingName, SettingValue } from "./../types/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SETTINGS_DEFAULTS } from "../constants/settings";
-import { GameOverReason, SettingsWithValue } from "../types/types";
 import { calculateRealSettingValue } from "../helpers/settings";
+import { GameState, GameOverReason } from "../constants/rules";
+import { SETTINGS_DEFAULTS, SettingName, SettingValue, SettingsWithValue } from "../constants/settings";
 
 type AppState = {
   settings: SettingsWithValue;

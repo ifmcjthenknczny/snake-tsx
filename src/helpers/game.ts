@@ -1,8 +1,8 @@
-import { Coords, Key } from "../types/types";
-import { BOARD_SIZE } from "../constants/board";
+import { BOARD_SIZE, Coords } from "../constants/board";
 import { OPPOSITE_DIRECTIONS } from "../constants/rules";
 import { areDeepEqual } from "../utils/object";
 import { coordsToInt, intToCoords, isAboutToGoOutsideGrid, isWithinGrid } from "./board";
+import { Key } from "../constants/keys";
 
 export const generateStartingSnakeTailCoords = (
     startingLength: number,

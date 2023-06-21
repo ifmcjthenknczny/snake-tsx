@@ -1,5 +1,5 @@
-import { CellColor } from '../types/types'
 import React from 'react'
+import { CellColor } from '../constants/board'
 
 export type Props = {
     color: CellColor

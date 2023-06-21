@@ -1,9 +1,26 @@
 import { calculateRealSettingValue } from "../helpers/settings";
-import {
-  SettingProperties,
+
+export type SettingName = (typeof SETTINGS)[number];
+
+export type SettingValue = number | boolean;
+
+export type SettingProperties = {
+  min: SettingValue;
+  max: SettingValue;
+  defaultValue: SettingValue;
+  step?: number;
+  realMin?: number;
+  realMax?: number;
+  label: string;
+  inverselyProportional?: true;
+  isBoolean?: true;
+  dependsOn?: SettingName[];
+  isDecimal?: true;
+};
+export type SettingsWithValue = Record<
   SettingName,
-  SettingsWithValue,
-} from "../types/types";
+  { relative: SettingValue; real: SettingValue }
+>;
 
 export const SETTINGS = [
   "WALLS",

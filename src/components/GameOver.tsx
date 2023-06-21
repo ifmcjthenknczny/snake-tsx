@@ -5,7 +5,7 @@ import { useSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
 import { setGameState, setNewGame } from '../redux/slices'
 import useHighScore from '../hooks/useHighScore'
-import { GameOverReason } from '../types/types'
+import { GameOverReason } from '../constants/rules'
 
 const GAME_OVER_LABELS: Record<GameOverReason, string> = { wall: "You crashed into a wall", tail: "You bit your own tail", mine: "You stepped on a mine" }
 
