@@ -13,7 +13,7 @@ const contentLines = [
     "The game ends if the snake hits a wall, a mine, or its own body."
 ]
 
-const bait = "Good luck and only the high scores!"
+const bait = "Good luck and only the highest scores!"
 
 const Help = () => {
     const onGoBack = useGoToMenu()

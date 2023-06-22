@@ -5,3 +5,8 @@ body {
   background-image: url('./assets/background.jpg');
 }
 
+html {
+  max-width: 70ch;
+  padding: auto;
+  line-height: 1.75;
+}

@@ -30,8 +30,8 @@ const GameOver = () => {
             <h5>{LABELS.score} {score}</h5>
             {highScore > score ? <h6>{LABELS.highScore} {highScore}</h6> : <h6>{LABELS.newHighScore}</h6>}
             <div className={styles.options}>
-                <ClickableText className={styles.again} text={LABELS.again} onClick={() => dispatch(setNewGame())} />
-                <ClickableText className={styles.settings} text={LABELS.menu} onClick={() => dispatch(setGameState('settings'))} />
+                <ClickableText text={LABELS.again} onClick={() => dispatch(setNewGame())} />
+                <ClickableText text={LABELS.menu} onClick={() => dispatch(setGameState('menu'))} />
             </div>
         </div>
     </div>

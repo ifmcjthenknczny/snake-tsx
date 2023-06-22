@@ -11,10 +11,9 @@
 .wrapper {
     width: calc(3.5vmin * 20 + 0.4vmin * 19);
     height: calc(3.5vmin * 20 + 0.4vmin * 19);
-}
-
-.again, .settings {
-    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .title {
@@ -24,4 +23,14 @@
 .options {
     display: flex;
     flex-direction: column;
+    padding-top: 2em;
+}
+
+h5, h6 {
+    line-height: 1;
+    margin: 0.5em;
+}
+
+h5 {
+    margin-top: 2em;
 }
