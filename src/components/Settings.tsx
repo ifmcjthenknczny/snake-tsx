@@ -24,6 +24,4 @@ const Settings = () => {
     )
 }
 
-// const filterItemsToShow = (settings: SettingsWithValue) => SETTINGS.filter(item => !SETTINGS_PROPERTIES[item].dependsOn || SETTINGS_PROPERTIES[item].dependsOn.every(dependency => settings[dependency] === true))
-
 export default Settings

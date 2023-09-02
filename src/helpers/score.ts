@@ -1,14 +1,16 @@
-import { BOARD_SIZE } from "../constants/board";
 import { SETTINGS_PROPERTIES } from "../constants/settings";
-
-const BOARD_SIZE_COEFF = (BOARD_SIZE.x * BOARD_SIZE.y) / 400;
+import { Coords } from "../constants/board";
 
 export const calculatePointsForEatingApple = (
   snakeLength: number,
   snakeMoveInterval: number,
-  minesOnBoard: number
-) =>
-  Math.ceil(
+  minesOnBoard: number,
+  boardSize: Coords,
+  applesEaten: number
+) => {
+  const BOARD_SIZE_COEFF = (boardSize.x * boardSize.y) / 400;
+
+  return Math.ceil(
     (snakeLength + minesOnBoard * 2) *
       BOARD_SIZE_COEFF *
       Math.min(
@@ -16,4 +18,5 @@ export const calculatePointsForEatingApple = (
           snakeMoveInterval,
         20
       )
-  );
+  ) + applesEaten;
+};

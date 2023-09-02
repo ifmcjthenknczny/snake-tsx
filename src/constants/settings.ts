@@ -29,6 +29,8 @@ export const SETTINGS = [
   "SNAKE_SPEED_MULTIPLIER",
   "APPLES_TO_SPEED_UP_SNAKE",
   "NEW_MINE_INTERVAL_MS",
+  "BOARD_WIDTH",
+  "BOARD_HEIGHT"
 ] as const;
 
 export const SETTINGS_PROPERTIES: Record<SettingName, SettingProperties> = {
@@ -81,6 +83,20 @@ export const SETTINGS_PROPERTIES: Record<SettingName, SettingProperties> = {
     defaultValue: 3,
     step: 1,
     label: "STARTING LENGTH",
+  },
+  BOARD_WIDTH: {
+    min: 10,
+    max: 50,
+    defaultValue: 20,
+    step: 1,
+    label: "BOARD WIDTH",
+  },
+  BOARD_HEIGHT: {
+    min: 10,
+    max: 50,
+    defaultValue: 20,
+    step: 1,
+    label: "BOARD HEIGHT",
   },
 };
 

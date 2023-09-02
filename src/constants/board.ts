@@ -7,11 +7,6 @@ export type Coords = {
 
 export type Element = "apple" | "empty" | "head" | "tail" | "mine";
 
-export const BOARD_SIZE = {
-  x: 20,
-  y: 20,
-}; // not implemented different sizes than 20x20 yet, CSS thing
-export const CELLS_COUNT = BOARD_SIZE.x * BOARD_SIZE.y;
 export const ELEMENTS_COLORS: Record<Element, CellColor> = {
   apple: "green",
   empty: "darkgray",
@@ -19,3 +14,7 @@ export const ELEMENTS_COLORS: Record<Element, CellColor> = {
   tail: "blue",
   mine: "black",
 };
+
+export const BOARD_RELATIVE_WINDOW_SIZE = 80;
+
+export const GAP_TO_CELL_RATIO = 0.1;

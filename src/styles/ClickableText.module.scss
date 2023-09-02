@@ -1,17 +1,19 @@
 .clickableText {
-    border: none;
-    background-color: transparent;
-    border-width: 0;
-    font-family: inherit;
-    font-size: inherit;
-    font-style: inherit;
-    font-weight: inherit;
-    line-height: inherit;
-    padding: 0;
+  border: none;
+  background-color: transparent;
+  border-width: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  padding: 0;
+}
 
-    &:hover {
-        color: red;
-        cursor: pointer;
-        transition: color .5s;
-    }
+.textContent {
+  &:hover {
+    color: red;
+    cursor: pointer;
+    transition: color 0.5s;
+  }
 }

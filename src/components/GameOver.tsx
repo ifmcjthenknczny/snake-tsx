@@ -7,7 +7,7 @@ import { setGameState, setNewGame } from '../redux/slices'
 import useHighScore from '../hooks/useHighScore'
 import { GameOverReason } from '../constants/rules'
 
-const GAME_OVER_LABELS: Record<GameOverReason, string> = { wall: "You crashed into a wall", tail: "You bit your own tail", mine: "You stepped on a mine" }
+const GAME_OVER_LABELS: Record<GameOverReason, string> = { wall: "crashed into a wall", tail: "bit your own tail", mine: "stepped on a mine" }
 
 const LABELS = {
     again: "TRY AGAIN",
@@ -26,7 +26,7 @@ const GameOver = () => {
     return <div className={styles.gameOver}>
         <div className={styles.wrapper}>
             <h1 className={styles.title}>{LABELS.title}</h1>
-            <h6>{GAME_OVER_LABELS[reason]}!</h6>
+            <h6>{`You ${GAME_OVER_LABELS[reason]}!`}</h6>
             <h5>{LABELS.score} {score}</h5>
             {highScore > score ? <h6>{LABELS.highScore} {highScore}</h6> : <h6>{LABELS.newHighScore}</h6>}
             <div className={styles.options}>

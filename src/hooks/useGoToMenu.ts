@@ -3,13 +3,16 @@ import { goToMenu } from "../redux/slices"
 import { MENU_KEY } from "../constants/keys"
 import useKeyClick from "./useKeyClick"
 
-const useGoToMenu = () => {
+const useGoToMenu = (additionalAction?: () => void) => {
     const dispatch = useDispatch()
 
     const onGoBack = () => dispatch(goToMenu())
 
     const handleKeydown = (e: KeyboardEvent) => {
         if (e.key === MENU_KEY) {
+            if (additionalAction) {
+                additionalAction()
+            }
             onGoBack()
         }
     }

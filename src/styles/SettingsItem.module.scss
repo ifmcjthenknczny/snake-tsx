@@ -19,17 +19,20 @@
 
 input[type="range"] {
   cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
 }
+
 input[type="range"]::-webkit-slider-runnable-track,
 input[type="range"]::-moz-range-track {
-  -webkit-appearance: none;
   background: blue;
   height: 0.5rem;
 }
+
 input[type="range"]::-webkit-slider-thumb,
 input[type="range"]::-moz-range-thumb {
   background: red;
   border-radius: 0;
   border: 2px black solid;
-  -webkit-appearance: none;
 }

@@ -1,0 +1,12 @@
+.statusBar {
+    top: 5vmin;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.small {
+    font-size: 0.5rem;
+    text-align: right;
+}
+
