@@ -2,9 +2,10 @@ import { randInt, randomElement } from "../utils/random";
 import { rangeExclude } from "../utils/range";
 import { rangeWithModulo } from "../utils/range";
 import {
-  BOARD_RELATIVE_WINDOW_SIZE,
   GAP_TO_CELL_RATIO,
   Coords,
+  HEIGHT_DEPENDENT_BOARD_SIZE,
+  WIDTH_DEPENDENT_BOARD_SIZE,
 } from "../constants/board";
 import { Key } from "../constants/keys";
 import { safeDivide } from "../utils/primitive";
@@ -103,9 +104,10 @@ export const findCellsInRadius = (
 };
 
 export const generateGridStyle = (boardSize: Coords, isWalls: boolean) => {
+  const boardRelativeSize = calculateBoardRelativeSize(boardSize)
   const boardSizeCoeff =
     safeDivide(
-      calculateBoardRelativeWidth(),
+      boardRelativeSize.value,
       Math.max(boardSize.x, boardSize.y),
       true
     ) /
@@ -113,14 +115,20 @@ export const generateGridStyle = (boardSize: Coords, isWalls: boolean) => {
   const gap = boardSizeCoeff * GAP_TO_CELL_RATIO;
 
   return {
-    width: `${gap * (boardSize.x - 1) + boardSizeCoeff * boardSize.x}vmin`,
-    height: `${gap * (boardSize.y - 1) + boardSizeCoeff * boardSize.y}vmin`,
-    gridTemplateColumns: `repeat(${boardSize.x}, ${boardSizeCoeff}vmin)`,
-    gridTemplateRows: `repeat(${boardSize.y}, ${boardSizeCoeff}vmin)`,
+    width: `${gap * (boardSize.x - 1) + boardSizeCoeff * boardSize.x}${boardRelativeSize.unit}`,
+    height: `${gap * (boardSize.y - 1) + boardSizeCoeff * boardSize.y}${boardRelativeSize.unit}`,
+    gridTemplateColumns: `repeat(${boardSize.x}, ${boardSizeCoeff}${boardRelativeSize.unit})`,
+    gridTemplateRows: `repeat(${boardSize.y}, ${boardSizeCoeff}${boardRelativeSize.unit})`,
     border: `${isWalls ? 10 : 2}px black solid`,
-    gridColumnGap: `${gap}vmin`,
-    gridRowGap: `${gap}vmin`,
+    gridColumnGap: `${gap}${boardRelativeSize.unit}`,
+    gridRowGap: `${gap}${boardRelativeSize.unit}`,
   };
 };
 
-export const calculateBoardRelativeWidth = () => BOARD_RELATIVE_WINDOW_SIZE; // TODO
+export const calculateBoardRelativeSize = (boardSize: Coords) => {
+  const screenRatio = window.innerWidth / window.innerHeight;
+  const boardRatio = boardSize.x / boardSize.y;
+  return boardRatio > screenRatio
+    ? HEIGHT_DEPENDENT_BOARD_SIZE
+    : WIDTH_DEPENDENT_BOARD_SIZE;
+};

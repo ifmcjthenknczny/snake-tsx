@@ -15,6 +15,7 @@ export const ELEMENTS_COLORS: Record<Element, CellColor> = {
   mine: "black",
 };
 
-export const BOARD_RELATIVE_WINDOW_SIZE = 80;
+export const HEIGHT_DEPENDENT_BOARD_SIZE = { value: 95, unit: 'vw' }
+export const WIDTH_DEPENDENT_BOARD_SIZE = { value: 90, unit: 'vh' }
 
 export const GAP_TO_CELL_RATIO = 0.1;

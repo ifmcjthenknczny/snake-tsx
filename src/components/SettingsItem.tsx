@@ -1,7 +1,7 @@
 import { SETTINGS_PROPERTIES } from "../constants/settings"
 import styles from '../styles/SettingsItem.module.scss'
 import classNames from "classnames"
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch } from "react-redux"
 import { toggleBooleanSetting, updateSetting } from "../redux/slices"
 import { useSelector } from "../redux/hooks"
@@ -14,11 +14,12 @@ type Props = {
 const SettingsItem = ({ name }: Props) => {
     const { settings } = useSelector()
     const { min, max, step, label, isBoolean, isDecimal } = SETTINGS_PROPERTIES[name]
-    const [valueLabel, setValueLabel] = useState<string>(toValueLabel(settings[name].relative))
+    const initialValueLabel = useMemo(() => toValueLabel(settings[name].relative, name, isDecimal), [name]) //eslint-disable-line react-hooks/exhaustive-deps
+    const [valueLabel, setValueLabel] = useState<string>(initialValueLabel)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        setValueLabel(toValueLabel(settings[name].relative, isDecimal))
+        setValueLabel(toValueLabel(settings[name].relative, name, isDecimal))
     }, [settings[name].relative]) //eslint-disable-line react-hooks/exhaustive-deps
 
 
@@ -46,7 +47,13 @@ const SettingsItem = ({ name }: Props) => {
         </div>)
 }
 
-const toValueLabel = (value: number | boolean, isDecimal?: true) => {
+const toValueLabel = (value: number | boolean, settingName: SettingName, isDecimal?: true) => {
+    if (settingName === 'SNAKE_SPEED_MULTIPLIER' && value === 1) {
+        return 'OFF'
+    }
+    if (settingName === 'APPLES_TO_SPEED_UP_SNAKE' && value === 1) {
+        return 'EVERY'
+    }
     if (typeof value === 'boolean') {
         return !!value ? 'ON' : 'OFF'
     }

@@ -14,16 +14,20 @@ export const roundNumber = (number: number, decimalPlaces: number = 0) => {
   return Math.round(number * multiplier) / multiplier;
 };
 
-export const calculateValueProportionally = (
-  referenceValue: number,
-  newMin: number,
-  newMax: number,
-  referenceMin: number,
-  referenceMax: number,
-  inverselyProportional?: true) =>
-  newMin +
-  ((newMax - newMin) *
+export const calculateValueProportionally = ({
+  referenceValue,
+  newRange,
+  referenceRange,
+  inverselyProportional,
+}: {
+  referenceValue: number;
+  newRange: { min: number; max: number };
+  referenceRange: { min: number; max: number };
+  inverselyProportional?: true;
+}) =>
+  newRange.min +
+  ((newRange.max - newRange.min) *
     (inverselyProportional
-      ? referenceMax - referenceValue
-      : referenceValue - referenceMin)) /
-    (referenceMax - referenceMin);
+      ? referenceRange.max - referenceValue
+      : referenceValue - referenceRange.min)) /
+    (referenceRange.max - referenceRange.min);

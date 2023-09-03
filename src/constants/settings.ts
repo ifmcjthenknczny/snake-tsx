@@ -19,8 +19,10 @@ export type SettingProperties = {
 };
 export type SettingsWithValue = Record<
   SettingName,
-  { relative: SettingValue; real: SettingValue }
+  SettingValuesSet
 >;
+
+type SettingValuesSet = { relative: SettingValue; real: SettingValue }
 
 export const SETTINGS = [
   "WALLS",
@@ -86,14 +88,14 @@ export const SETTINGS_PROPERTIES: Record<SettingName, SettingProperties> = {
   },
   BOARD_WIDTH: {
     min: 10,
-    max: 50,
+    max: 40,
     defaultValue: 20,
     step: 1,
     label: "BOARD WIDTH",
   },
   BOARD_HEIGHT: {
     min: 10,
-    max: 50,
+    max: 40,
     defaultValue: 20,
     step: 1,
     label: "BOARD HEIGHT",
