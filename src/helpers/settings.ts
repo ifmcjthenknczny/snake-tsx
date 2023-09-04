@@ -3,14 +3,14 @@ import { SettingValue } from "../constants/settings";
 import { calculateValueProportionally } from "./../utils/primitive";
 
 export const calculateRealSettingValue = (
-  option: SettingName,
+  settingName: SettingName,
   value: SettingValue
-) => calculateSettingValue(option, value, 'toReal')
+) => calculateSettingValue(settingName, value, 'toReal')
 
 export const calculateRelativeSettingValue = (
-  option: SettingName,
+  settingName: SettingName,
   realValue: SettingValue
-) => calculateSettingValue(option, realValue, 'toRelative')
+) => calculateSettingValue(settingName, realValue, 'toRelative')
 
 const calculateSettingValue = (
   option: SettingName,

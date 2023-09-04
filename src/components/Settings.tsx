@@ -17,7 +17,7 @@ const Settings = () => {
             <Logo />
             {SETTINGS_TITLE}
             <div className={styles.settingsList}>
-                {SETTINGS.map(option => <SettingsItem key={option} name={option} />)}
+                {SETTINGS.map(setting => <SettingsItem key={setting} name={setting} />)}
             </div>
             <ClickableText text={GO_BACK_TEXT} onClick={onGoBack} />
         </div>
