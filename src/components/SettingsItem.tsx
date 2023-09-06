@@ -42,8 +42,10 @@ const SettingsItem = ({ name }: Props) => {
     return (
         <div className={styles.item}>
             <label className={classNames(styles.label, SETTINGS_PROPERTIES[name].dependsOn && styles.dependent)} htmlFor={name}>{label}</label>
-            <input className={styles.input} type="range" value={+settings[name].relative} min={+min} max={+max} step={+step} onChange={handleChange} onClick={handleClick} onDoubleClick={handleDoubleClick} />
-            <div className={styles.value}>{valueLabel}</div>
+            <div className={styles.operable}>
+                <input className={styles.input} type="range" value={+settings[name].relative} min={+min} max={+max} step={+step} onChange={handleChange} onClick={handleClick} onDoubleClick={handleDoubleClick} />
+                <div className={styles.value}>{valueLabel}</div>
+            </div>
         </div>)
 }
 

@@ -1,49 +1,59 @@
+$big-screen-breakpoint: 577px;
+
 .info {
-    text-align: center;
-    top: 5vmin;
-    display: flex;
-    flex-grow: 1;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
+  text-align: center;
+  overflow: scroll;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  @media screen and (min-width: $big-screen-breakpoint) {
+    overflow: hidden;
+  }
 }
 
 .content {
+  @media screen and (min-width: $big-screen-breakpoint) {
     width: 50%;
+  }
 }
 
 .list {
-    padding: 1em;
-    display: flex;
-    flex-direction: column;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
 }
 
 .element {
-    padding: 0;
-    margin: 0.3em 0 0.3em;
-    text-align: justify;
-    font-size: 12px;
+  padding: 0;
+  margin: 0.3em 0 0.3em;
+  text-align: justify;
+  font-size: 12px;
 }
 
 .bait {
-    font-size: 14px;
-    padding-bottom: 1em;
+  font-size: 14px;
+  padding-bottom: 1em;
 }
 
 .controls {
-    font-size: 10px;
-    display: flex;
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  @media screen and (min-width: $big-screen-breakpoint) {
     flex-direction: row;
+  }
 }
 
 .control {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .imageWrapper {
-    margin: 20px 0 10px;
+  margin: 20px 0 10px;
 }

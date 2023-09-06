@@ -1,12 +1,30 @@
+$big-screen-breakpoint: 800px;
+
 .label {
   text-align: left;
 }
 
 .item {
-  display: grid;
-  width: 700px;
-  grid-template-columns: auto 180px 80px;
-  column-gap: 10px;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  @media screen and (min-width: $big-screen-breakpoint) {
+    display: grid;
+    width: 650px;
+    grid-template-columns: auto 180px 80px;
+  }
+}
+
+.operable {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 5px;
+  @media screen and (min-width: $big-screen-breakpoint) {
+    margin-bottom: 0;
+  }
 }
 
 .dependent {
@@ -18,10 +36,14 @@
 }
 
 input[type="range"] {
+  width: 250px;
   cursor: pointer;
   -webkit-appearance: none;
   appearance: none;
   background: transparent;
+  @media screen and (min-width: $big-screen-breakpoint) {
+    width: auto;
+  }
 }
 
 input[type="range"]::-webkit-slider-runnable-track,

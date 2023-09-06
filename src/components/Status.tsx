@@ -21,7 +21,7 @@ const Status = ({ score, moveRefresh, mines, boardSize, tailLength, apples }: Pr
         const { value, unit } = calculateBoardRelativeSize(boardSize)
         return ({ width: `${unit === 'vw' ? value : Math.max(value * boardSize.x / boardSize.y, 36)}${unit}` })
     }, [boardSize.x, boardSize.y]) //eslint-disable-line react-hooks/exhaustive-deps
-    const nextPoints = useMemo(() => calculatePointsForEatingApple(tailLength + 1, moveRefresh, mines, boardSize, apples), [apples]) //eslint-disable-line react-hooks/exhaustive-deps
+    const nextPoints = calculatePointsForEatingApple(tailLength + 1, moveRefresh, mines, boardSize, apples)
 
     return <div className={styles.statusBar} style={statusStyle}>
         <div className={styles.bigInfo}>
