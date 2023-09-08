@@ -6,5 +6,6 @@ export const CONTROL_KEYS: Key[] = [
   "ArrowUp",
   "ArrowDown",
 ];
-export const PAUSE_KEY = "Space"; // not implemented
 export const MENU_KEY = "Escape";
+export const PAUSE_KEY = "Enter"; // not implemented
+export const FAST_SNAKE_KEY = "Space"; // not implemented

@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { calculateRealSettingValue } from "../helpers/settings";
 import { GameState, GameOverReason } from "../constants/rules";
-import { SETTINGS_DEFAULTS, SettingName, SettingValue, SettingsWithValue } from "../constants/settings";
+import { SETTINGS_DEFAULTS, SettingsWithValue } from "../constants/settings";
 
 type AppState = {
   settings: SettingsWithValue;
@@ -21,33 +20,6 @@ const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
-    updateSetting: (
-      state,
-      action: PayloadAction<{
-        settingName: SettingName;
-        settingValue: SettingValue;
-      }>
-    ) => {
-      const { settingName, settingValue } = action.payload;
-      state.settings = {
-        ...state.settings,
-        ...{
-          [settingName]: {
-            relative: settingValue,
-            real: calculateRealSettingValue(settingName, settingValue),
-          },
-        },
-      };
-    },
-    toggleBooleanSetting: (
-      state,
-      settingName: PayloadAction<keyof AppState["settings"]>
-    ) => {
-      state.settings[settingName.payload] = {
-        relative: !state.settings[settingName.payload].relative,
-        real: !state.settings[settingName.payload].real
-      };
-    },
     setLastGameOverReason: (state, action: PayloadAction<GameOverReason>) => {
       state.lastGameOverReason = action.payload;
     },
@@ -66,8 +38,8 @@ const appSlice = createSlice({
       state.gameState = action.payload;
     },
     goToMenu: (state) => {
-      state.gameState = 'menu'
-    }
+      state.gameState = "menu";
+    },
   },
 });
 
@@ -76,8 +48,6 @@ export type RootState = {
 };
 
 export const {
-  toggleBooleanSetting,
-  updateSetting,
   setLastGameOverReason,
   increaseScore,
   setGameState,

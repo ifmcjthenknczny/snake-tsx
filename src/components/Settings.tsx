@@ -1,25 +1,37 @@
 import ClickableText from "./ClickableText"
 import Logo from "./Logo"
 import styles from "../styles/Settings.module.scss"
-import { SETTINGS } from "../constants/settings"
+import { SETTINGS_DEFAULTS, SettingName, SettingValuesSet } from "../constants/settings"
 import SettingsItem from './SettingsItem'
-import React from "react"
+import React, { useState } from "react"
 import useGoToMenu from "../hooks/useGoToMenu"
-import { GO_BACK_TEXT } from "../constants/labels"
+import useLocalStorage from "../hooks/useLocalStorage"
+import { LOCAL_STORAGE_SETTINGS_NAME } from "../constants/localStorage"
 
 const SETTINGS_TITLE = "SETTINGS"
 
 const Settings = () => {
+    const [storedSettings, setStoredSettings] = useLocalStorage(LOCAL_STORAGE_SETTINGS_NAME, SETTINGS_DEFAULTS)
+    const [settings, setSettings] = useState(storedSettings)
     const onGoBack = useGoToMenu()
+
+    const handleUpdate = (settingName: SettingName, newValues: SettingValuesSet) => {
+        setSettings((prev) => ({ ...prev, [settingName]: newValues }))
+    }
+
+    const handleGoBack = () => {
+        setStoredSettings(settings)
+        onGoBack()
+    }
 
     return (
         <div className={styles.settings}>
             <Logo />
             {SETTINGS_TITLE}
             <div className={styles.settingsList}>
-                {SETTINGS.map(setting => <SettingsItem key={setting} name={setting} />)}
+                {Object.entries(settings).map(([name, values]) => <SettingsItem key={name} name={name as SettingName} values={values} onUpdate={handleUpdate} />)}
             </div>
-            <ClickableText text={GO_BACK_TEXT} onClick={onGoBack} />
+            <ClickableText className={styles.goBackButton} text="GO BACK AND SAVE" onClick={handleGoBack} />
         </div>
     )
 }

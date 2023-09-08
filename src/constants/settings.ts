@@ -22,7 +22,7 @@ export type SettingsWithValue = Record<
   SettingValuesSet
 >;
 
-type SettingValuesSet = { relative: SettingValue; real: SettingValue }
+export type SettingValuesSet = { relative: SettingValue; real: SettingValue }
 
 export const SETTINGS = [
   "WALLS",

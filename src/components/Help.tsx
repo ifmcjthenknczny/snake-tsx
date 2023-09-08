@@ -2,15 +2,14 @@ import ClickableText from "./ClickableText"
 import Logo from "./Logo"
 import React from "react"
 import useGoToMenu from "../hooks/useGoToMenu"
-import { GO_BACK_TEXT } from "../constants/labels"
 import styles from '../styles/Help.module.scss'
 import arrowKeys from '../assets/arrowkeys.png'
 import esc from '../assets/esc.png'
 
 const contentLines = [
-    "The objective of the game is to earn points by eating as many apples as you can",
-    "Amount of points earned is based on the snake's length, speed, and the number of mines on the board",
-    "The game ends if the snake hits a wall, a mine, or its own body."
+    "The objective of the game is to earn points by eating as many apples as you can. The more apples you eat, the faster you are.",
+    "Amount of points earned is mostly based on the your length, speed, and the number of mines on the board.",
+    "Avoid walls, black mines and your own body."
 ]
 
 const bait = "Good luck and only the highest of scores for you!"
@@ -31,13 +30,12 @@ const Help = () => {
                 </li>
                 <div className={styles.bait}>{bait}</div>
             </div>
-            <ClickableText text={GO_BACK_TEXT} onClick={onGoBack} />
+            <ClickableText text="GO BACK" onClick={onGoBack} />
         </div>
     )
 }
 
 export default Help
-
 
 const ControlsHelp = ({ image, text }: { image: string; text: string }) => <div className={styles.control}>
     <div className={styles.imageWrapper}><img src={image} alt={''} /></div>

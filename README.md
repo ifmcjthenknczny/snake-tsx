@@ -17,9 +17,20 @@ This is just Snake game popular from old Nokia phones written in React with Type
 ## Technologies
 
 - HTML5
-- CSS3
+- Sass
 - React 18
 - Typescript 4.8
+- Redux
+
+## Features
+
+- Original point system
+- Real-time status bar
+- Multiple customizable settings: initial speed, speed multiplier, board size, starting length, walls etc.
+- Saving high score and recent settings in local storage
+- Escape keybinding
+- Responsive board view
+- Mines don't appear close to the snake's head
 
 ## Setup
 

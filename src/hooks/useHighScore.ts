@@ -1,4 +1,4 @@
-import { LOCAL_STORAGE_HIGH_SCORE_NAME } from "../constants/score"
+import { LOCAL_STORAGE_HIGH_SCORE_NAME } from "../constants/localStorage"
 import useLocalStorage from "./useLocalStorage"
 
 const useHighScore = (): [number, (score: number) => void] => {

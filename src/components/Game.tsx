@@ -8,15 +8,19 @@ import styles from '../styles/Game.module.scss';
 import useKeyClick from '../hooks/useKeyClick';
 import { useDispatch } from 'react-redux';
 import { increaseScore, setGameOver } from '../redux/slices';
-import { useSelector } from '../redux/hooks';
 import useHighScore from '../hooks/useHighScore';
 import useGoToMenu from '../hooks/useGoToMenu';
 import { Coords } from '../constants/board';
 import BoardWrapper from './BoardWrapper';
+import useLocalStorage from '../hooks/useLocalStorage';
+import { SETTINGS_DEFAULTS } from '../constants/settings';
+import { LOCAL_STORAGE_SETTINGS_NAME } from '../constants/localStorage';
+import useSelector from '../hooks/useSelector';
 
 const Game = () => {
     const dispatch = useDispatch()
-    const { score, settings } = useSelector()
+    const { score } = useSelector()
+    const [settings] = useLocalStorage(LOCAL_STORAGE_SETTINGS_NAME, SETTINGS_DEFAULTS)
     const boardSize = { x: settings.BOARD_WIDTH.real, y: settings.BOARD_HEIGHT.real } as Coords
 
     useGoToMenu()

@@ -43,3 +43,19 @@ const calculateSettingValue = (
 
   return calculateValueProportionally(payload)
 };
+
+export const toValueLabel = (value: number | boolean, settingName: SettingName, isDecimal?: true) => {
+  if (settingName === 'SNAKE_SPEED_MULTIPLIER' && value === 1) {
+      return 'OFF'
+  }
+  if (settingName === 'APPLES_TO_SPEED_UP_SNAKE' && value === 1) {
+      return 'EVERY'
+  }
+  if (typeof value === 'boolean') {
+      return !!value ? 'ON' : 'OFF'
+  }
+  if (isDecimal) {
+      return `${value.toFixed(2)}`
+  }
+  return `${value}`
+}
