@@ -1,13 +1,13 @@
 import React from "react"
-import Game from "./Game"
-import GameOver from "./GameOver"
-import Menu from "./Menu"
-import Settings from './Settings'
-import styles from '../styles/App.module.scss'
+import Game from "./game/Game/Game"
+import GameOver from "./gameover/GameOver/GameOver"
+import Menu from "./menu/Menu/Menu"
+import Settings from './menu/Settings/Settings'
+import styles from './App.module.scss'
 import useSelector from "../hooks/useSelector"
 import { useDispatch } from "react-redux"
 import { setNewGame, setGameState } from "../redux/slices"
-import Help from "./Help"
+import Help from "./menu/Help/Help"
 import { MenuOption } from "../constants/labels"
 
 const App = () => {

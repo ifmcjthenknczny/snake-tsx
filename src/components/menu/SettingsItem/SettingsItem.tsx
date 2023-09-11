@@ -1,8 +1,8 @@
-import { SETTINGS_PROPERTIES, SettingValuesSet, SettingName } from "../constants/settings"
-import styles from '../styles/SettingsItem.module.scss'
+import { SETTINGS_PROPERTIES, SettingValuesSet, SettingName } from "../../../constants/settings"
+import styles from './SettingsItem.module.scss'
 import classNames from "classnames"
 import React, { useEffect, useMemo, useState } from 'react'
-import { calculateRealSettingValue, toValueLabel } from "../helpers/settings"
+import { calculateRealSettingValue, toValueLabel } from "../../../helpers/settings"
 
 type Props = {
     name: SettingName

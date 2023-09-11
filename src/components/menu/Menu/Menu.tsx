@@ -1,8 +1,8 @@
-import Logo from './Logo'
-import styles from '../styles/Menu.module.scss'
-import ClickableText from './ClickableText'
+import Logo from '../../common/Logo/Logo'
+import styles from './Menu.module.scss'
+import ClickableText from '../../common/ClickableText/ClickableText'
 import React from 'react'
-import { MenuOption } from '../constants/labels'
+import { MenuOption } from '../../../constants/labels'
 
 type Props = {
     options: { label: MenuOption; onChosen: () => void }[]

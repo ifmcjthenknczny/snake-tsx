@@ -1,7 +1,7 @@
 import React from "react"
-import { Coords } from "../constants/board"
-import Board from "./Board"
-import Status from "./Status"
+import { Coords } from "../../../constants/board"
+import Board from "../Board/Board"
+import Status from "../StatusBar/StatusBar"
 
 type Props = {
     score: number

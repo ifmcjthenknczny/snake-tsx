@@ -1,4 +1,4 @@
-import styles from '../styles/ClickableText.module.scss'
+import styles from './ClickableText.module.scss'
 import classNames from 'classnames'
 import React from 'react'
 

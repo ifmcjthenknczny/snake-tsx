@@ -1,10 +1,10 @@
-import styles from '../styles/Status.module.scss'
+import styles from './StatusBar.module.scss'
 import React, { useMemo } from 'react'
-import { Coords } from '../constants/board'
-import { calculatePointsForEatingApple } from '../helpers/score'
-import { calculateRelativeSettingValue } from '../helpers/settings'
-import { roundNumber } from '../utils/primitive'
-import { calculateBoardRelativeSize } from '../helpers/board'
+import { Coords } from '../../../constants/board'
+import { calculatePointsForEatingApple } from '../../../helpers/score'
+import { calculateRelativeSettingValue } from '../../../helpers/settings'
+import { roundNumber } from '../../../utils/primitive'
+import { calculateBoardRelativeSize } from '../../../helpers/board'
 
 type Props = {
     score: number

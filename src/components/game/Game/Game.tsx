@@ -1,21 +1,21 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { CONTROL_KEYS, Key } from '../constants/keys';
-import { OPPOSITE_DIRECTIONS, STARTING_DIRECTION, NEW_MINE_DISTANCE_FROM_HEAD } from '../constants/rules';
-import { generateRandomAvailableCoords, findCellsInRadius } from '../helpers/board';
-import { generateStartingSnakeTailCoords, findNextHeadPosition, isEatingApple, isGameOver, calculateHeadStartingPosition } from '../helpers/game';
-import { calculatePointsForEatingApple } from '../helpers/score';
-import styles from '../styles/Game.module.scss';
-import useKeyClick from '../hooks/useKeyClick';
+import { CONTROL_KEYS, Key } from '../../../constants/keys';
+import { OPPOSITE_DIRECTIONS, STARTING_DIRECTION, NEW_MINE_DISTANCE_FROM_HEAD } from '../../../constants/rules';
+import { generateRandomAvailableCoords, findCellsInRadius } from '../../../helpers/board';
+import { generateStartingSnakeTailCoords, findNextHeadPosition, isEatingApple, isGameOver, calculateHeadStartingPosition } from '../../../helpers/game';
+import { calculatePointsForEatingApple } from '../../../helpers/score';
+import styles from './Game.module.scss';
+import useKeyClick from '../../../hooks/useKeyClick';
 import { useDispatch } from 'react-redux';
-import { increaseScore, setGameOver } from '../redux/slices';
-import useHighScore from '../hooks/useHighScore';
-import useGoToMenu from '../hooks/useGoToMenu';
-import { Coords } from '../constants/board';
-import BoardWrapper from './BoardWrapper';
-import useLocalStorage from '../hooks/useLocalStorage';
-import { SETTINGS_DEFAULTS } from '../constants/settings';
-import { LOCAL_STORAGE_SETTINGS_NAME } from '../constants/localStorage';
-import useSelector from '../hooks/useSelector';
+import { increaseScore, setGameOver } from '../../../redux/slices';
+import useHighScore from '../../../hooks/useHighScore';
+import useGoToMenu from '../../../hooks/useGoToMenu';
+import { Coords } from '../../../constants/board';
+import BoardWrapper from '../BoardWrapper/BoardWrapper';
+import useLocalStorage from '../../../hooks/useLocalStorage';
+import { SETTINGS_DEFAULTS } from '../../../constants/settings';
+import { LOCAL_STORAGE_SETTINGS_NAME } from '../../../constants/localStorage';
+import useSelector from '../../../hooks/useSelector';
 
 const Game = () => {
     const dispatch = useDispatch()

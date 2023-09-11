@@ -1,11 +1,11 @@
-import styles from '../styles/GameOver.module.scss'
-import ClickableText from './ClickableText'
+import styles from './GameOver.module.scss'
+import ClickableText from '../../common/ClickableText/ClickableText'
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { setGameState, setNewGame } from '../redux/slices'
-import useHighScore from '../hooks/useHighScore'
-import { GameOverReason } from '../constants/rules'
-import useSelector from '../hooks/useSelector'
+import { setGameState, setNewGame } from '../../../redux/slices'
+import useHighScore from '../../../hooks/useHighScore'
+import { GameOverReason } from '../../../constants/rules'
+import useSelector from '../../../hooks/useSelector'
 
 const GAME_OVER_LABELS: Record<GameOverReason, string> = { wall: "crashed into a wall", tail: "bit your own tail", mine: "stepped on a mine" }
 

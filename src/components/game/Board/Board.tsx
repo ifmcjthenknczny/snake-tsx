@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { ELEMENTS_COLORS, CellColor, Coords } from "../constants/board";
-import Cell from "./Cell";
-import { coordsToInt, generateGridStyle, isWithinGrid } from "../helpers/board";
-import styles from '../styles/Board.module.scss'
+import { ELEMENTS_COLORS, CellColor, Coords } from "../../../constants/board";
+import Cell from "../Cell/Cell";
+import { coordsToInt, generateGridStyle, isWithinGrid } from "../../../helpers/board";
+import styles from './Board.module.scss'
 
 type Props = {
     apple: Coords;

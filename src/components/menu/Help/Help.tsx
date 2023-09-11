@@ -1,10 +1,10 @@
-import ClickableText from "./ClickableText"
-import Logo from "./Logo"
+import ClickableText from "../../common/ClickableText/ClickableText"
+import Logo from "../../common/Logo/Logo"
 import React from "react"
-import useGoToMenu from "../hooks/useGoToMenu"
-import styles from '../styles/Help.module.scss'
-import arrowKeys from '../assets/arrowkeys.png'
-import esc from '../assets/esc.png'
+import useGoToMenu from "../../../hooks/useGoToMenu"
+import styles from './Help.module.scss'
+import arrowKeys from '../../../assets/arrowkeys.png'
+import esc from '../../../assets/esc.png'
 
 const contentLines = [
     "The objective of the game is to earn points by eating as many apples as you can. The more apples you eat, the faster you are.",

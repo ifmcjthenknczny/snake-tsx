@@ -1,12 +1,12 @@
-import ClickableText from "./ClickableText"
-import Logo from "./Logo"
-import styles from "../styles/Settings.module.scss"
-import { SETTINGS_DEFAULTS, SettingName, SettingValuesSet } from "../constants/settings"
-import SettingsItem from './SettingsItem'
+import ClickableText from "../../common/ClickableText/ClickableText"
+import Logo from "../../common/Logo/Logo"
+import styles from "./Settings.module.scss"
+import { SETTINGS_DEFAULTS, SettingName, SettingValuesSet } from "../../../constants/settings"
+import SettingsItem from '../SettingsItem/SettingsItem'
 import React, { useState } from "react"
-import useGoToMenu from "../hooks/useGoToMenu"
-import useLocalStorage from "../hooks/useLocalStorage"
-import { LOCAL_STORAGE_SETTINGS_NAME } from "../constants/localStorage"
+import useGoToMenu from "../../../hooks/useGoToMenu"
+import useLocalStorage from "../../../hooks/useLocalStorage"
+import { LOCAL_STORAGE_SETTINGS_NAME } from "../../../constants/localStorage"
 
 const SETTINGS_TITLE = "SETTINGS"
 
