@@ -20,7 +20,7 @@ const Status = ({ score, moveRefresh, mines, boardSize, tailLength, apples }: Pr
     const statusStyle = useMemo(() => {
         const { value, unit } = calculateBoardRelativeSize(boardSize)
         return ({ width: `${unit === 'vw' ? value : Math.max(value * boardSize.x / boardSize.y, 36)}${unit}` })
-    }, [boardSize.x, boardSize.y]) //eslint-disable-line react-hooks/exhaustive-deps
+    }, [boardSize.x, boardSize.y])
     const nextPoints = calculatePointsForEatingApple(tailLength + 1, moveRefresh, mines, boardSize, apples)
 
     return <div className={styles.statusBar} style={statusStyle}>

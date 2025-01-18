@@ -52,7 +52,7 @@ export const toValueLabel = (value: number | boolean, settingName: SettingName, 
       return 'EVERY'
   }
   if (typeof value === 'boolean') {
-      return !!value ? 'ON' : 'OFF'
+      return value ? 'ON' : 'OFF'
   }
   if (isDecimal) {
       return `${value.toFixed(2)}`

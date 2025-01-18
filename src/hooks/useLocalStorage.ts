@@ -8,7 +8,7 @@ const useLocalStorage = <T>(
     try {
       const item = localStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
-    } catch (err) {
+    } catch {
       return initialValue;
     }
   });
@@ -17,7 +17,7 @@ const useLocalStorage = <T>(
     try {
       localStorage.setItem(key, JSON.stringify(value));
       setStoredValue(value);
-    } catch (err) {
+    } catch {
       // do nothing
     }
   };

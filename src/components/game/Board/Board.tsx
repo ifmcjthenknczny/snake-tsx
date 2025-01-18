@@ -19,11 +19,11 @@ const Board = (props: Props) => {
     const boardInitialState = useMemo(() => new Array<CellColor>(boardSize.x * boardSize.y).fill('darkgray'), [boardSize.x, boardSize.y])
 
     const [board, setBoard] = useState<CellColor[]>(boardInitialState)
-    const gridStyle = useMemo(() => generateGridStyle(boardSize, isWalls), [boardSize.x, boardSize.y, isWalls]) //eslint-disable-line react-hooks/exhaustive-deps
+    const gridStyle = useMemo(() => generateGridStyle(boardSize, isWalls), [boardSize.x, boardSize.y, isWalls])
 
     useEffect(() => {
         setBoard(findNewBoardState(props))
-    }, [apple.x, apple.y, snakeHead.x, snakeHead.y, snakeTail.at(0)?.x, snakeTail.at(0)?.y, mines.at(-1)?.x, mines.at(-1)?.y, boardSize.x, boardSize.y]) //eslint-disable-line react-hooks/exhaustive-deps
+    }, [apple.x, apple.y, snakeHead.x, snakeHead.y, snakeTail.at(0)?.x, snakeTail.at(0)?.y, mines.at(-1)?.x, mines.at(-1)?.y, boardSize.x, boardSize.y])
 
     return (
         <div className={styles.grid} style={gridStyle}>

@@ -26,13 +26,13 @@ const Game = () => {
     useGoToMenu()
     const [, maybeSetHighScore] = useHighScore()
 
-    const startingHeadPosition = useMemo(() => calculateHeadStartingPosition(boardSize), []) //eslint-disable-line react-hooks/exhaustive-deps
+    const startingHeadPosition = useMemo(() => calculateHeadStartingPosition(boardSize), [])
     const [headCoords, setHeadCoords] = useState<Coords>(startingHeadPosition)
 
-    const startingTailCoords = useMemo(() => generateStartingSnakeTailCoords(settings.STARTING_LENGTH.real as number, startingHeadPosition, STARTING_DIRECTION, boardSize), []) //eslint-disable-line react-hooks/exhaustive-deps
+    const startingTailCoords = useMemo(() => generateStartingSnakeTailCoords(settings.STARTING_LENGTH.real as number, startingHeadPosition, STARTING_DIRECTION, boardSize), [])
     const [tailCoords, setTailCoords] = useState<Coords[]>(startingTailCoords)
 
-    const startingAppleCoords = useMemo(() => generateRandomAvailableCoords([headCoords, ...tailCoords], boardSize), []) //eslint-disable-line react-hooks/exhaustive-deps
+    const startingAppleCoords = useMemo(() => generateRandomAvailableCoords([headCoords, ...tailCoords], boardSize), [])
     const [appleCoords, setAppleCoords] = useState(startingAppleCoords);
 
     const [moveRefresh, setMovesRefresh] = useState(settings.STARTING_MOVE_REFRESH_MS.real as number);
@@ -49,14 +49,14 @@ const Game = () => {
         return () => {
             clearTimeout(moveTimeout)
         }
-    }, [moveRefresh, headCoords.x, headCoords.y])  //eslint-disable-line react-hooks/exhaustive-deps
+    }, [moveRefresh, headCoords.x, headCoords.y])
 
     useEffect(() => {
         const mineInterval = setInterval(deployNewMine, settings.NEW_MINE_INTERVAL_MS.real as number)
         return () => {
             clearInterval(mineInterval)
         }
-    }, []) //eslint-disable-line react-hooks/exhaustive-deps
+    }, [])
 
     const gameIteration = () => {
         snakeMoveIteration()

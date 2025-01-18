@@ -12,12 +12,12 @@ type Props = {
 
 const SettingsItem = ({ name, values, onUpdate }: Props) => {
     const { min, max, step, label, isBoolean, isDecimal } = SETTINGS_PROPERTIES[name]
-    const initialValueLabel = useMemo(() => toValueLabel(values.relative, name, isDecimal), [name]) //eslint-disable-line react-hooks/exhaustive-deps
+    const initialValueLabel = useMemo(() => toValueLabel(values.relative, name, isDecimal), [name])
     const [valueLabel, setValueLabel] = useState<string>(initialValueLabel)
 
     useEffect(() => {
         setValueLabel(toValueLabel(values.relative, name, isDecimal))
-    }, [values.relative]) //eslint-disable-line react-hooks/exhaustive-deps
+    }, [values.relative])
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

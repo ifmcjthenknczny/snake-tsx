@@ -84,12 +84,12 @@ export const isGameOver = (
   if (isWalls && !isWithinGrid(headCoords, boardSize)) {
     return "wall";
   }
-  for (let tail of tailCoords) {
+  for (const tail of tailCoords) {
     if (areDeepEqual(tail, headCoords)) {
       return "tail";
     }
   }
-  for (let mine of mineCoords) {
+  for (const mine of mineCoords) {
     if (areDeepEqual(mine, headCoords)) {
       return "mine";
     }
