@@ -37,11 +37,15 @@ This is just Snake game popular from old Nokia phones written in React with Type
 
 ## Setup
 
-- No setup needed. You can run the deployed page.
+If you do not have yarn installed, run the below command first:
+```bash
+npm install -g yarn
+```
 
-## Status
-
-Project is: _in progress_
+To run the game locally, paste command below into your terminal and click enter:
+```bash
+git clone https://github.com/ifmcjthenknczny/snake-tsx && cd snake-tsx && yarn install && yarn start
+```
 
 ## License
 
