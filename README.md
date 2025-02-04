@@ -3,6 +3,8 @@
 > Popular snake game written in React with Typescript.  
 [Deployed game](https://snake-tsx.vercel.app/)
 
+![Here there was supposed to be the screenshot of the application](screenshot.png)
+
 ## Table of contents
 
 - [General info](#general-info)
