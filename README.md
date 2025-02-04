@@ -1,6 +1,7 @@
 # Snake React Tsx
 
 > Popular snake game written in React with Typescript.
+[Deployed game](https://snake-tsx.vercel.app/)
 
 ## Table of contents
 
@@ -40,6 +41,11 @@ This is just Snake game popular from old Nokia phones written in React with Type
 
 Project is: _in progress_
 
+## License
+
+This work is licensed under a [Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org/licenses/by-nc/4.0/).
+
 ## Contact
 
-Created purely by Maciej Konieczny
+Created purely by [Maciej Konieczny](https://github.com/ifmcjthenknczny).  
+Project Link: [https://github.com/ifmcjthenknczny/snake-tsx](https://github.com/ifmcjthenknczny/snake-tsx)
