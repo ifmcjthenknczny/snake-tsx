@@ -1,6 +1,6 @@
 # Snake React Tsx
 
-> Popular snake game written in React with Typescript.
+> Popular snake game written in React with Typescript.  
 [Deployed game](https://snake-tsx.vercel.app/)
 
 ## Table of contents
