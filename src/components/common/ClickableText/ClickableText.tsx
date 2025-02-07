@@ -8,9 +8,13 @@ type Props = {
     className?: string
 }
 
-const ClickableText = ({ text, onClick, className }: Props) =>
-    <button className={classNames(styles.clickableText, className)} onClick={onClick}>
+const ClickableText = ({ text, onClick, className }: Props) => (
+    <button
+        className={classNames(styles.clickableText, className)}
+        onClick={onClick}
+    >
         <span className={styles.textContent}>{text}</span>
     </button>
+)
 
 export default ClickableText

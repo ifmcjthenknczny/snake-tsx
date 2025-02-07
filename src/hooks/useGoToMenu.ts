@@ -1,7 +1,7 @@
-import { useDispatch } from "react-redux"
-import { goToMenu } from "../redux/slices"
-import { MENU_KEY } from "../constants/keys"
-import useKeyClick from "./useKeyClick"
+import { useDispatch } from 'react-redux'
+import { goToMenu } from '../redux/slices'
+import { MENU_KEY } from '../constants/keys'
+import useKeyClick from './useKeyClick'
 
 const useGoToMenu = (additionalAction?: () => void) => {
     const dispatch = useDispatch()

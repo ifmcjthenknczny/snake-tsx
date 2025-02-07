@@ -38,6 +38,7 @@
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.1.0",
     "globals": "^15.14.0",
+    "prettier": "^3.4.2",
     "vite": "^6.0.7",
     "vite-plugin-eslint": "^1.8.1"
   },
@@ -45,7 +46,9 @@
     "start": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "lint": "npx eslint . --fix"
+    "lint": "npx eslint . --fix",
+    "dev": "vite",
+    "format": "prettier --write src/"
   },
   "browserslist": {
     "production": [

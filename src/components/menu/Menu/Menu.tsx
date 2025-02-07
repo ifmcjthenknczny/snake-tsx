@@ -8,13 +8,18 @@ type Props = {
     options: { label: MenuOption; onChosen: () => void }[]
 }
 
-const Menu = ({ options }: Props) =>
-(<div className={styles.menu}>
-    <Logo />
-    <div className={styles.options}>
-        {options.map(({ label, onChosen }, i) => <ClickableText key={i} onClick={onChosen} text={label} />)}
+const Menu = ({ options }: Props) => (
+    <div className={styles.menu}>
+        <Logo />
+        <div className={styles.options}>
+            {options.map(({ label, onChosen }, i) => (
+                <ClickableText key={i} onClick={onChosen} text={label} />
+            ))}
+        </div>
+        <div className={styles.credits}>
+            2022-{new Date().getFullYear()} Maciej Konieczny
+        </div>
     </div>
-    <div className={styles.credits}>2022-{new Date().getFullYear()} Maciej Konieczny</div>
-</div>)
+)
 
 export default Menu

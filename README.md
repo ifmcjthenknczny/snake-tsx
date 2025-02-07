@@ -15,7 +15,7 @@
 
 ## General info
 
-This is just Snake game popular from old Nokia phones written in React with Typescript for practice. You control snake by arrows on keyboard. Eat green apples and watch out for black mines!
+This is just Snake game popular from old Nokia phones written in React with Typescript for practice. You control snake by arrows on keyboard or by touch of specific part of your mobile screen. Eat green apples and watch out for black mines!
 
 ## Technologies
 
@@ -29,11 +29,12 @@ This is just Snake game popular from old Nokia phones written in React with Type
 
 - Original point system
 - Real-time status bar
+- Controllable by touch on mobile
 - Multiple customizable settings: initial speed, speed multiplier, board size, starting length, walls etc.
 - Saving high score and recent settings in local storage
 - Escape keybinding
 - Responsive board view
-- Mines don't appear close to the snake's head
+- New mines don't appear close to the snake's head
 
 ## Setup
 

@@ -1,8 +1,15 @@
-import { SETTINGS_PROPERTIES, SettingValuesSet, SettingName } from "../../../constants/settings"
+import {
+    SETTINGS_PROPERTIES,
+    SettingValuesSet,
+    SettingName
+} from '../../../constants/settings'
 import styles from './SettingsItem.module.scss'
-import classNames from "classnames"
+import classNames from 'classnames'
 import React, { useEffect, useMemo, useState } from 'react'
-import { calculateRealSettingValue, toValueLabel } from "../../../helpers/settings"
+import {
+    calculateRealSettingValue,
+    toValueLabel
+} from '../../../helpers/settings'
 
 type Props = {
     name: SettingName
@@ -11,18 +18,24 @@ type Props = {
 }
 
 const SettingsItem = ({ name, values, onUpdate }: Props) => {
-    const { min, max, step, label, isBoolean, isDecimal } = SETTINGS_PROPERTIES[name]
-    const initialValueLabel = useMemo(() => toValueLabel(values.relative, name, isDecimal), [name])
+    const { min, max, step, label, isBoolean, isDecimal } =
+        SETTINGS_PROPERTIES[name]
+    const initialValueLabel = useMemo(
+        () => toValueLabel(values.relative, name, isDecimal),
+        [name]
+    )
     const [valueLabel, setValueLabel] = useState<string>(initialValueLabel)
 
     useEffect(() => {
         setValueLabel(toValueLabel(values.relative, name, isDecimal))
     }, [values.relative])
 
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!isBoolean) {
-            onUpdate(name, { relative: +e.target.value, real: calculateRealSettingValue(name, +e.target.value) })
+            onUpdate(name, {
+                relative: +e.target.value,
+                real: calculateRealSettingValue(name, +e.target.value)
+            })
         }
     }
 
@@ -38,18 +51,40 @@ const SettingsItem = ({ name, values, onUpdate }: Props) => {
     const handleDoubleClick = () => {
         onUpdate(name, {
             relative: SETTINGS_PROPERTIES[name].defaultValue,
-            real: calculateRealSettingValue(name, SETTINGS_PROPERTIES[name].defaultValue)
+            real: calculateRealSettingValue(
+                name,
+                SETTINGS_PROPERTIES[name].defaultValue
+            )
         })
     }
 
     return (
         <div className={styles.item}>
-            <label className={classNames(styles.label, SETTINGS_PROPERTIES[name].dependsOn && styles.dependent)} htmlFor={name}>{label}</label>
+            <label
+                className={classNames(
+                    styles.label,
+                    SETTINGS_PROPERTIES[name].dependsOn && styles.dependent
+                )}
+                htmlFor={name}
+            >
+                {label}
+            </label>
             <div className={styles.operable}>
-                <input className={styles.input} type="range" value={+values.relative} min={+min} max={+max} step={+step} onChange={handleChange} onClick={handleClick} onDoubleClick={handleDoubleClick} />
+                <input
+                    className={styles.input}
+                    type="range"
+                    value={+values.relative}
+                    min={+min}
+                    max={+max}
+                    step={+step}
+                    onChange={handleChange}
+                    onClick={handleClick}
+                    onDoubleClick={handleDoubleClick}
+                />
                 <div className={styles.value}>{valueLabel}</div>
             </div>
-        </div>)
+        </div>
+    )
 }
 
 export default SettingsItem
