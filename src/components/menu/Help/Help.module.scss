@@ -1,4 +1,5 @@
 $big-screen-breakpoint: 577px;
+$mobile-breakpoint: 767px;
 
 .info {
     text-align: center;
@@ -45,6 +46,18 @@ $big-screen-breakpoint: 577px;
     flex-direction: column;
     @media screen and (min-width: $big-screen-breakpoint) {
         flex-direction: row;
+    }
+}
+
+.desktopControls {
+    @media screen and (max-width: $mobile-breakpoint) {
+        display: none;
+    }
+}
+
+.mobileControls {
+    @media screen and (min-width: $mobile-breakpoint) {
+        display: none;
     }
 }
 

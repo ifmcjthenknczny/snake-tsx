@@ -37,6 +37,7 @@ const Game = () => {
         LOCAL_STORAGE_SETTINGS_NAME,
         SETTINGS_DEFAULTS
     )
+
     const boardSize = {
         x: settings.BOARD_WIDTH.real,
         y: settings.BOARD_HEIGHT.real
@@ -119,11 +120,17 @@ const Game = () => {
         }
     }
 
-    const handleKeydown = (e: KeyboardEvent) => {
-        if ((CONTROL_KEYS as string[]).includes(e.key) && !keyFired.current) {
-            keyFired.current = true
-            setLastKey(e.key as Key)
+    const handleMove = (key: string, setKeyFired?: true) => {
+        if ((CONTROL_KEYS as string[]).includes(key) && !keyFired.current) {
+            if (setKeyFired) {
+                keyFired.current = true
+            }
+            setLastKey(key as Key)
         }
+    }
+
+    const handleKeydown = (e: KeyboardEvent) => {
+        handleMove(e.key, true)
     }
 
     const handleKeyup = () => {
@@ -236,6 +243,7 @@ const Game = () => {
                 appleCoords={appleCoords}
                 applesEaten={applesEaten}
                 headCoords={headCoords}
+                handleMove={handleMove}
             />
         </div>
     )

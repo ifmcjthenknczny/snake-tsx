@@ -1,0 +1,6 @@
+.mobileGoBack {
+    margin-top: 16px;
+    @media (min-width: 767px) {
+        display: none;
+    }
+}

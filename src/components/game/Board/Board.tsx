@@ -7,6 +7,7 @@ import {
     isWithinGrid
 } from '../../../helpers/board'
 import styles from './Board.module.scss'
+import MobileTouchControls from '../MobileTouchControls/MobileTouchControls'
 
 type Props = {
     apple: Coords
@@ -15,6 +16,7 @@ type Props = {
     mines: Coords[]
     isWalls: boolean
     boardSize: Coords
+    handleMove: (key: string) => void
 }
 
 const Board = (props: Props) => {
@@ -47,11 +49,13 @@ const Board = (props: Props) => {
     ])
 
     return (
-        <div className={styles.grid} style={gridStyle}>
-            {board.map((color, index) => (
-                <Cell key={index} color={color} />
-            ))}
-        </div>
+        <MobileTouchControls handleMove={props.handleMove}>
+            <div className={styles.grid} style={gridStyle}>
+                {board.map((color, index) => (
+                    <Cell key={index} color={color} />
+                ))}
+            </div>
+        </MobileTouchControls>
     )
 }
 
