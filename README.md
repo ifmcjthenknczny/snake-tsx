@@ -8,14 +8,6 @@ Popular snake game written in React with Typescript.
 
 ![Here there was supposed to be the screenshot of the application](screenshot.png)
 
-## Table of contents
-
-- [General info](#general-info)
-- [Technologies](#technologies)
-- [Setup](#setup)
-- [Status](#status)
-- [Contact](#contact)
-
 ## General info
 
 This is just Snake game popular from old Nokia phones written in React with Typescript for practice. You control snake by arrows on keyboard or by touch of specific part of your mobile screen. Eat green apples and watch out for black mines!
@@ -46,7 +38,7 @@ If you do not have yarn installed, run the below command first:
 npm install -g yarn
 ```
 
-To run the game locally, paste command below into your terminal and click enter:
+To run the game locally, paste command below into your terminal and confirm by clicking enter:
 ```bash
 git clone https://github.com/ifmcjthenknczny/snake-tsx && cd snake-tsx && yarn install && yarn start
 ```
