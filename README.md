@@ -1,7 +1,11 @@
 # Snake React Tsx
 
-> Popular snake game written in React with Typescript.  
-[Deployed game](https://snake-tsx.vercel.app/)
+Popular snake game written in React with Typescript.  
+
+[Deployed game](https://snake-tsx.vercel.app/)  
+
+> Note:  
+> It is kind of old code that I started writing long time ago. It works just fine, but it is not as clean I would like to.
 
 ![Here there was supposed to be the screenshot of the application](screenshot.png)
 

@@ -16,3 +16,5 @@ export const OPPOSITE_DIRECTIONS: Record<Key, Key> = {
 }
 
 export const GAME_OVER_REASONS = ['wall', 'tail', 'mine'] as const
+
+export const POINTS_FOR_TIME_INTERVAL_MS = 10_000

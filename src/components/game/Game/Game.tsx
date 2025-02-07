@@ -3,7 +3,8 @@ import { CONTROL_KEYS, Key } from '../../../constants/keys'
 import {
     OPPOSITE_DIRECTIONS,
     STARTING_DIRECTION,
-    NEW_MINE_DISTANCE_FROM_HEAD
+    NEW_MINE_DISTANCE_FROM_HEAD,
+    POINTS_FOR_TIME_INTERVAL_MS
 } from '../../../constants/rules'
 import {
     generateRandomAvailableCoords,
@@ -99,6 +100,17 @@ const Game = () => {
         )
         return () => {
             clearInterval(mineInterval)
+        }
+    }, [])
+
+    useEffect(() => {
+        const pointsForTime = setInterval(
+            () => dispatch(increaseScore(1)),
+            POINTS_FOR_TIME_INTERVAL_MS
+        )
+
+        return () => {
+            clearInterval(pointsForTime)
         }
     }, [])
 
