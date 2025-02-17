@@ -1,0 +1,11 @@
+.mobileTouchZone {
+    position: absolute;
+    background-color: violet;
+    pointer-events: none;
+    transition: opacity 0.4s ease-out;
+    opacity: 0.15;
+}
+
+.hidden {
+    display: none;
+}

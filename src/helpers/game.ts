@@ -7,7 +7,7 @@ import {
     isAboutToGoOutsideGrid,
     isWithinGrid
 } from './board'
-import { Key } from '../constants/keys'
+import { Key } from '../constants/controls'
 
 export const generateStartingSnakeTailCoords = (
     startingLength: number,

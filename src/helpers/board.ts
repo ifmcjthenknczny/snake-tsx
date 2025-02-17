@@ -7,7 +7,7 @@ import {
     HEIGHT_DEPENDENT_BOARD_SIZE,
     WIDTH_DEPENDENT_BOARD_SIZE
 } from '../constants/board'
-import { Key } from '../constants/keys'
+import { Key } from '../constants/controls'
 import { safeDivide } from '../utils/primitive'
 
 export const generateRandomCoords = (boardSize: Coords) => ({

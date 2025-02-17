@@ -1,4 +1,4 @@
-import { Key } from './keys'
+import { Key } from './controls'
 
 export type GameState = 'menu' | 'settings' | 'gameOver' | 'playing' | 'help'
 

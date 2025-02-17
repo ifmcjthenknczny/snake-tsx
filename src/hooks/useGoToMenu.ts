@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { goToMenu } from '../redux/slices'
-import { MENU_KEY } from '../constants/keys'
+import { MENU_KEY } from '../constants/controls'
 import useKeyClick from './useKeyClick'
 
 const useGoToMenu = (additionalAction?: () => void) => {

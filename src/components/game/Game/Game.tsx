@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { CONTROL_KEYS, Key } from '../../../constants/keys'
+import { CONTROL_KEYS, Key } from '../../../constants/controls'
 import {
     OPPOSITE_DIRECTIONS,
     STARTING_DIRECTION,
