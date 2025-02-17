@@ -1,4 +1,4 @@
-$big-screen-breakpoint: 800px;
+@use '../../../_breakpoints';
 
 .label {
     text-align: left;
@@ -8,7 +8,7 @@ $big-screen-breakpoint: 800px;
     display: flex;
     flex-direction: column;
     width: auto;
-    @media screen and (min-width: $big-screen-breakpoint) {
+    @media screen and (min-width: breakpoints.$mobile-breakpoint) {
         display: grid;
         width: 650px;
         grid-template-columns: auto 180px 80px;
@@ -22,7 +22,7 @@ $big-screen-breakpoint: 800px;
     justify-content: space-between;
     gap: 10px;
     margin-bottom: 5px;
-    @media screen and (min-width: $big-screen-breakpoint) {
+    @media screen and (min-width: breakpoints.$mobile-breakpoint) {
         margin-bottom: 0;
     }
 }
@@ -41,7 +41,7 @@ input[type='range'] {
     -webkit-appearance: none;
     appearance: none;
     background: transparent;
-    @media screen and (min-width: $big-screen-breakpoint) {
+    @media screen and (min-width: breakpoints.$mobile-breakpoint) {
         width: auto;
     }
 }

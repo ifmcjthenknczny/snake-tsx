@@ -1,5 +1,4 @@
-$big-screen-breakpoint: 577px;
-$mobile-breakpoint: 767px;
+@use '../../../_breakpoints';
 
 .info {
     text-align: center;
@@ -11,13 +10,13 @@ $mobile-breakpoint: 767px;
     justify-content: center;
     width: 100%;
     height: 100%;
-    @media screen and (min-width: $big-screen-breakpoint) {
+    @media screen and (min-width: breakpoints.$big-screen-breakpoint) {
         overflow: hidden;
     }
 }
 
 .content {
-    @media screen and (min-width: $big-screen-breakpoint) {
+    @media screen and (min-width: breakpoints.$big-screen-breakpoint) {
         width: 50%;
     }
 }
@@ -44,20 +43,20 @@ $mobile-breakpoint: 767px;
     font-size: 10px;
     display: flex;
     flex-direction: column;
-    @media screen and (min-width: $big-screen-breakpoint) {
+    @media screen and (min-width: breakpoints.$big-screen-breakpoint) {
         flex-direction: row;
     }
 }
 
 .desktopControls {
-    @media screen and (max-width: $mobile-breakpoint) {
+    @media screen and (max-width: breakpoints.$mobile-breakpoint) {
         display: none;
     }
 }
 
 .mobileControls {
     gap: 12px;
-    @media screen and (min-width: $mobile-breakpoint) {
+    @media screen and (min-width: breakpoints.$mobile-breakpoint) {
         display: none;
     }
 }
