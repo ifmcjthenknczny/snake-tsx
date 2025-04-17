@@ -1,10 +1,12 @@
 # Snake React Tsx
 
+> Ever played Snake?
+
 Popular snake game written in React with Typescript.  
 
 [Deployed game](https://snake-tsx.vercel.app/)  
 
-> <ins>Note:</ins> It is kind of old code that I started writing long time ago. It works just fine, but it is not as clean as I would like it to be.
+> <ins>Note:</ins> It is kind of old code that I started writing long time ago. It works just fine, but it is not as clean as I would like it to be. Nevertheless, it shows how much I have grown since the start of my professional career.
 
 ![Here there was supposed to be the screenshot of the application](screenshot.png)
 
