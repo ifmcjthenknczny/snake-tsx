@@ -18,8 +18,8 @@
     "classnames": "^2.3.2",
     "fs": "^0.0.1-security",
     "nanoid": "^4.0.0",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
     "react-redux": "^8.1.0",
     "redux": "^4.2.1",
     "sass": "^1.63.4",
@@ -37,9 +37,9 @@
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.1.0",
-    "globals": "^15.14.0",
+    "globals": "^16.5.0",
     "prettier": "^3.4.2",
-    "vite": "^6.0.7",
+    "vite": "^7.2.6",
     "vite-plugin-eslint": "^1.8.1"
   },
   "scripts": {
@@ -61,5 +61,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "packageManager": "yarn@1.22.19+sha512.ff4579ab459bb25aa7c0ff75b62acebe576f6084b36aa842971cf250a5d8c6cd3bc9420b22ce63c7f93a0857bc6ef29291db39c3e7a23aab5adfd5a4dd6c5d71"
 }
