@@ -6,11 +6,11 @@ import {
     SettingName,
     SettingValuesSet
 } from '../../../constants/settings'
-import SettingsItem from '../SettingsItem/SettingsItem'
 import React, { useState } from 'react'
 import useGoToMenu from '../../../hooks/useGoToMenu'
 import useLocalStorage from '../../../hooks/useLocalStorage'
 import { LOCAL_STORAGE_SETTINGS_NAME } from '../../../constants/localStorage'
+import SettingsList from '../SettingsList/SettingsList'
 
 const SETTINGS_TITLE = 'SETTINGS'
 
@@ -42,16 +42,7 @@ const Settings = () => {
         <div className={styles.settings}>
             <Logo />
             {SETTINGS_TITLE}
-            <div className={styles.settingsList}>
-                {Object.entries(settings).map(([name, values]) => (
-                    <SettingsItem
-                        key={name}
-                        name={name as SettingName}
-                        values={values}
-                        onUpdate={handleUpdate}
-                    />
-                ))}
-            </div>
+            <SettingsList settings={settings} handleUpdate={handleUpdate} />
             <div className={styles.buttonContainer}>
                 <ClickableText
                     text="RESET TO DEFAULT"

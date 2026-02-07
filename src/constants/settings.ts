@@ -16,6 +16,7 @@ export type SettingProperties = {
     isBoolean?: true
     dependsOn?: SettingName[]
     isDecimal?: true
+    offValue?: number
 }
 export type SettingsWithValue = Record<SettingName, SettingValuesSet>
 
@@ -49,24 +50,27 @@ export const SETTINGS_PROPERTIES: Record<SettingName, SettingProperties> = {
         step: 0.05,
         defaultValue: 1.25,
         label: 'SPEED MULTIPLIER',
-        isDecimal: true
+        isDecimal: true,
+        offValue: 1
     },
     APPLES_TO_SPEED_UP_SNAKE: {
         min: 1,
         max: 10,
         defaultValue: 5,
         step: 1,
-        label: 'APPLES TO SPEED UP'
+        label: 'APPLES TO SPEED UP',
+        dependsOn: ['SNAKE_SPEED_MULTIPLIER']
     },
     NEW_MINE_INTERVAL_MS: {
-        min: 1,
+        min: 0,
         max: 10,
         defaultValue: 1,
         step: 1,
         realMin: 1000,
         realMax: 30000,
         label: 'MINE DEPLOYMENT SPEED',
-        inverselyProportional: true
+        inverselyProportional: true,
+        offValue: 0
     },
     WALLS: {
         min: false,

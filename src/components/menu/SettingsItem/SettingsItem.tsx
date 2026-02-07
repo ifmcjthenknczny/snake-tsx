@@ -15,9 +15,10 @@ type Props = {
     name: SettingName
     values: SettingValuesSet
     onUpdate: (settingName: SettingName, newValues: SettingValuesSet) => void
+    disabled: boolean
 }
 
-const SettingsItem = ({ name, values, onUpdate }: Props) => {
+const SettingsItem = ({ name, values, onUpdate, disabled }: Props) => {
     const { min, max, step, label, isBoolean, isDecimal } =
         SETTINGS_PROPERTIES[name]
     const initialValueLabel = useMemo(
@@ -59,12 +60,9 @@ const SettingsItem = ({ name, values, onUpdate }: Props) => {
     }
 
     return (
-        <div className={styles.item}>
+        <div className={classNames(styles.item, disabled && styles.disabled)}>
             <label
-                className={classNames(
-                    styles.label,
-                    SETTINGS_PROPERTIES[name].dependsOn && styles.dependent
-                )}
+                className={styles.label}
                 htmlFor={name}
             >
                 {label}
@@ -77,9 +75,10 @@ const SettingsItem = ({ name, values, onUpdate }: Props) => {
                     min={+min}
                     max={+max}
                     step={+step}
-                    onChange={handleChange}
-                    onClick={handleClick}
-                    onDoubleClick={handleDoubleClick}
+                    onChange={disabled ? undefined : handleChange}
+                    onClick={disabled ? undefined : handleClick}
+                    onDoubleClick={disabled ? undefined : handleDoubleClick}
+                    disabled={disabled}
                 />
                 <div className={styles.value}>{valueLabel}</div>
             </div>

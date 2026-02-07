@@ -55,16 +55,16 @@ export const toValueLabel = (
     settingName: SettingName,
     isDecimal?: true
 ) => {
-    if (settingName === 'SNAKE_SPEED_MULTIPLIER' && value === 1) {
-        return 'OFF'
-    }
     if (settingName === 'APPLES_TO_SPEED_UP_SNAKE' && value === 1) {
         return 'EVERY'
+    }
+    if (value === SETTINGS_PROPERTIES[settingName].offValue) {
+        return 'OFF'
     }
     if (typeof value === 'boolean') {
         return value ? 'ON' : 'OFF'
     }
-    if (isDecimal) {
+    if (isDecimal && typeof value === 'number') {
         return `${value.toFixed(2)}`
     }
     return `${value}`

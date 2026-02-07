@@ -100,6 +100,9 @@ const Game = () => {
     }, [moveRefresh, bodyCoords.at(0).x, bodyCoords.at(0).y])
 
     useEffect(() => {
+        if (settings.NEW_MINE_INTERVAL_MS.relative === 0) {
+            return
+        }
         const mineInterval = setInterval(
             deployNewMine,
             settings.NEW_MINE_INTERVAL_MS.real as number
