@@ -22,20 +22,7 @@ type Props = {
 const Board = (props: Props) => {
     const { apple, snakeHead, snakeTail, mines, isWalls, boardSize } = props
 
-    const boardInitialState = useMemo(
-        () => new Array<CellColor>(boardSize.x * boardSize.y).fill('darkgray'),
-        [boardSize.x, boardSize.y]
-    )
-
-    const [board, setBoard] = useState<CellColor[]>(boardInitialState)
-    const gridStyle = useMemo(
-        () => generateGridStyle(boardSize, isWalls),
-        [boardSize.x, boardSize.y, isWalls]
-    )
-
-    useEffect(() => {
-        setBoard(findNewBoardState(props))
-    }, [
+    const board = useMemo(() => findNewBoardState(props), [
         apple.x,
         apple.y,
         snakeHead.x,
@@ -47,6 +34,11 @@ const Board = (props: Props) => {
         boardSize.x,
         boardSize.y
     ])
+
+    const gridStyle = useMemo(
+        () => generateGridStyle(boardSize, isWalls),
+        [boardSize.x, boardSize.y, isWalls]
+    )
 
     return (
         <MobileTouchControls handleMove={props.handleMove}>
