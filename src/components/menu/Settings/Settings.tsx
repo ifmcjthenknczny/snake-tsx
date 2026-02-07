@@ -34,6 +34,10 @@ const Settings = () => {
         onGoBack()
     }
 
+    const handleReset = () => {
+        setSettings(SETTINGS_DEFAULTS)
+    }
+
     return (
         <div className={styles.settings}>
             <Logo />
@@ -48,11 +52,16 @@ const Settings = () => {
                     />
                 ))}
             </div>
-            <ClickableText
-                className={styles.goBackButton}
-                text="GO BACK AND SAVE"
-                onClick={handleGoBack}
-            />
+            <div className={styles.buttonContainer}>
+                <ClickableText
+                    text="RESET TO DEFAULT"
+                    onClick={handleReset}
+                />
+                <ClickableText
+                    text="GO BACK AND SAVE"
+                    onClick={handleGoBack}
+                />
+            </div>
         </div>
     )
 }

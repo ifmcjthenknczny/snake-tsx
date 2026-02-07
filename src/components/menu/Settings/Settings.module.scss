@@ -16,6 +16,8 @@
     flex-direction: column;
 }
 
-.goBackButton {
+.buttonContainer {
     padding-top: 1em;
+    display: flex;
+    flex-direction: column;
 }

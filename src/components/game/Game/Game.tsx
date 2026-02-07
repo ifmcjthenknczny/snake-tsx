@@ -13,7 +13,7 @@ import {
 import {
     generateStartingSnakeTailCoords,
     findNextHeadPosition,
-    isEatingApple as willEatApple,
+    isEatingApple,
     isGameOver,
     calculateHeadStartingPosition
 } from '../../../helpers/game'
@@ -132,7 +132,7 @@ const Game = () => {
             maybeSetHighScore(score)
             dispatch(setGameOver(gameOverReason))
         }
-        if (willEatApple(bodyCoords.at(0), appleCoords)) {
+        if (isEatingApple(bodyCoords.at(0), appleCoords)) {
             eatApple()
         }
     }
@@ -180,7 +180,7 @@ const Game = () => {
                 boardSize
             ), 
             lastHeadPositionRef.current,
-            ...(willEatApple(prevHeadCoords, appleCoords)
+            ...(isEatingApple(prevHeadCoords, appleCoords)
                 ? prevTailCoords
                 : prevTailCoords.slice(0, -1))
         ])
