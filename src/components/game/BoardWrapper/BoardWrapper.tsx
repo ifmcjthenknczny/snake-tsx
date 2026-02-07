@@ -13,10 +13,9 @@ type Props = {
     moveRefresh: number
     mineCoords: Coords[]
     boardSize: Coords
-    tailCoords: Coords[]
+    bodyCoords: Coords[]
     applesEaten: number
     appleCoords: Coords
-    headCoords: Coords
     isWalls: boolean
     handleMove: (key: string) => void
 }
@@ -26,10 +25,9 @@ const BoardWrapper = ({
     moveRefresh,
     mineCoords,
     boardSize,
-    tailCoords,
+    bodyCoords,
     applesEaten,
     appleCoords,
-    headCoords,
     isWalls,
     handleMove
 }: Props) => {
@@ -41,13 +39,12 @@ const BoardWrapper = ({
                 moveRefresh={moveRefresh}
                 mines={mineCoords.length}
                 boardSize={boardSize}
-                tailLength={tailCoords.length}
+                tailLength={bodyCoords.length - 1}
                 apples={applesEaten}
             />
             <Board
                 apple={appleCoords}
-                snakeHead={headCoords}
-                snakeTail={tailCoords}
+                snakeBody={bodyCoords}
                 mines={mineCoords}
                 isWalls={isWalls}
                 boardSize={boardSize}

@@ -78,12 +78,12 @@ export const isEatingApple = (headCoords: Coords, appleCoords: Coords) =>
     areDeepEqual(headCoords, appleCoords)
 
 export const isGameOver = (
-    headCoords: Coords,
-    tailCoords: Coords[],
+    bodyCoords: Coords[],
     mineCoords: Coords[],
     isWalls: boolean,
     boardSize: Coords
 ) => {
+    const [headCoords, ...tailCoords] = bodyCoords
     if (isWalls && !isWithinGrid(headCoords, boardSize)) {
         return 'wall'
     }

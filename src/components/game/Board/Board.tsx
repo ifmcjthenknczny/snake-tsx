@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { ELEMENTS_COLORS, CellColor, Coords } from '../../../constants/board'
 import Cell from '../Cell/Cell'
 import {
@@ -11,8 +11,7 @@ import MobileTouchControls from '../MobileTouchControls/MobileTouchControls'
 
 type Props = {
     apple: Coords
-    snakeHead: Coords
-    snakeTail: Coords[]
+    snakeBody: Coords[]
     mines: Coords[]
     isWalls: boolean
     boardSize: Coords
@@ -20,19 +19,11 @@ type Props = {
 }
 
 const Board = (props: Props) => {
-    const { apple, snakeHead, snakeTail, mines, isWalls, boardSize } = props
+    const { snakeBody, isWalls, boardSize } = props
 
     const board = useMemo(() => findNewBoardState(props), [
-        apple.x,
-        apple.y,
-        snakeHead.x,
-        snakeHead.y,
-        snakeTail.at(0)?.x,
-        snakeTail.at(0)?.y,
-        mines.at(-1)?.x,
-        mines.at(-1)?.y,
-        boardSize.x,
-        boardSize.y
+        snakeBody.at(0).x,
+        snakeBody.at(0).y,
     ])
 
     const gridStyle = useMemo(
@@ -55,12 +46,12 @@ export default Board
 
 const findNewBoardState = ({
     apple,
-    snakeHead,
-    snakeTail,
+    snakeBody,
     mines,
     isWalls,
     boardSize
 }: Props) => {
+    const [snakeHead, ...snakeTail] = snakeBody
     const newBoardState = new Array<CellColor>(boardSize.x * boardSize.y).fill(
         ELEMENTS_COLORS.empty
     )
