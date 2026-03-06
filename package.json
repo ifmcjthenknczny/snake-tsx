@@ -39,6 +39,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "lint:fix": "npx eslint . --fix",
+    "lint": "npx eslint .",
     "dev": "vite",
     "format": "prettier --write src/"
   },
