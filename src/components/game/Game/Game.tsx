@@ -31,6 +31,38 @@ import { SETTINGS_DEFAULTS } from '../../../constants/settings'
 import { LOCAL_STORAGE_SETTINGS_NAME } from '../../../constants/localStorage'
 import useSelector from '../../../hooks/useSelector'
 
+type GameState = {
+    bodyCoords: Coords[]
+    appleCoords: Coords
+    mineCoords: Coords[]
+    moveRefresh: number
+    applesEaten: number
+}
+
+const createInitialGameState = (
+    boardSize: Coords,
+    startingLength: number,
+    startingMoveRefreshMs: number
+): GameState => {
+    const headStartingPosition = calculateHeadStartingPosition(boardSize)
+    const bodyCoords = [
+        headStartingPosition,
+        ...generateStartingSnakeTailCoords(
+            startingLength,
+            headStartingPosition,
+            STARTING_DIRECTION,
+            boardSize
+        )
+    ]
+    return {
+        bodyCoords,
+        appleCoords: generateRandomAvailableCoords(bodyCoords, boardSize),
+        mineCoords: [],
+        moveRefresh: startingMoveRefreshMs,
+        applesEaten: 0
+    }
+}
+
 const Game = () => {
     const dispatch = useDispatch()
     const { score } = useSelector()
@@ -39,57 +71,54 @@ const Game = () => {
         SETTINGS_DEFAULTS
     )
 
-    const boardSize = {
-        x: settings.BOARD_WIDTH.real,
-        y: settings.BOARD_HEIGHT.real
-    } as Coords
+    const boardSize = useMemo(
+        () => ({
+            x: settings.BOARD_WIDTH.real,
+            y: settings.BOARD_HEIGHT.real
+        }) as Coords,
+        [settings.BOARD_WIDTH.real, settings.BOARD_HEIGHT.real]
+    )
 
     useGoToMenu()
     const [, maybeSetHighScore] = useHighScore()
 
-    const headStartingPosition = useMemo(() => calculateHeadStartingPosition(boardSize), [])
-
-    const [bodyCoords, setBodyCoords] = useState([headStartingPosition, ...generateStartingSnakeTailCoords(
-                settings.STARTING_LENGTH.real as number,
-                headStartingPosition,
-                STARTING_DIRECTION,
-                boardSize
-            )])
-
-    const [appleCoords, setAppleCoords] = useState(generateRandomAvailableCoords(
-                bodyCoords,
-                boardSize
-            ))
-
-    const [mineCoords, setMineCoords] = useState<Coords[]>([])
-
-    const [moveRefresh, setMovesRefresh] = useState(
-        settings.STARTING_MOVE_REFRESH_MS.real as number
+    const [gameState, setGameState] = useState<GameState>(() =>
+        createInitialGameState(
+            boardSize,
+            settings.STARTING_LENGTH.real as number,
+            settings.STARTING_MOVE_REFRESH_MS.real as number
+        )
     )
-    const [applesEaten, setApplesEaten] = useState<number>(0)
+
+    const { bodyCoords, appleCoords, mineCoords, moveRefresh, applesEaten } = gameState
 
     const keyRef = useRef(STARTING_DIRECTION)
     const forbiddenDirectionRef = useRef<string | null>(null)
-    const lastHeadPositionRef = useRef<Coords>(bodyCoords?.at(0))
+    const lastHeadPositionRef = useRef<Coords | undefined>(bodyCoords?.at(0))
     const keyFired = useRef(false)
 
     const deployNewMine = () => {
-        const cellsNearHead = NEW_MINE_DISTANCE_FROM_HEAD
-            ? findCellsInRadius(
-                NEW_MINE_DISTANCE_FROM_HEAD,
-                lastHeadPositionRef.current,
-                settings.WALLS.real as boolean,
-                boardSize
-            )
-            : []
-
-        setMineCoords((prev) => [
-            ...prev,
-            generateRandomAvailableCoords(
-                [appleCoords, ...bodyCoords, ...cellsNearHead],
-                boardSize
-            )
-        ])
+        setGameState((prev) => {
+            const head = prev.bodyCoords[0]
+            const cellsNearHead = head && NEW_MINE_DISTANCE_FROM_HEAD
+                ? findCellsInRadius(
+                    NEW_MINE_DISTANCE_FROM_HEAD,
+                    head,
+                    settings.WALLS.real as boolean,
+                    boardSize
+                )
+                : []
+            return {
+                ...prev,
+                mineCoords: [
+                    ...prev.mineCoords,
+                    generateRandomAvailableCoords(
+                        [prev.appleCoords, ...prev.bodyCoords, ...cellsNearHead],
+                        boardSize
+                    )
+                ]
+            }
+        })
     }
 
     useEffect(() => {
@@ -97,7 +126,7 @@ const Game = () => {
         return () => {
             clearTimeout(moveTimeout)
         }
-    }, [moveRefresh, bodyCoords.at(0).x, bodyCoords.at(0).y])
+    }, [moveRefresh, bodyCoords.at(0)?.x, bodyCoords.at(0)?.y])
 
     useEffect(() => {
         if (settings.NEW_MINE_INTERVAL_MS.relative === 0) {
@@ -166,7 +195,7 @@ const Game = () => {
     }
 
     const setLastHeadPosition = () => {
-        lastHeadPositionRef.current = bodyCoords.at(0)
+        lastHeadPositionRef.current = gameState.bodyCoords.at(0)
     }
 
     const snakeMoveIteration = () => {
@@ -176,17 +205,25 @@ const Game = () => {
     }
 
     const moveBody = () => {
-        setBodyCoords(([prevHeadCoords, ...prevTailCoords]) => [findNextHeadPosition(
+        setGameState((prev) => {
+            const [prevHeadCoords, ...prevTailCoords] = prev.bodyCoords
+            const newHead = findNextHeadPosition(
                 prevHeadCoords,
                 keyRef.current,
                 settings.WALLS.real as boolean,
                 boardSize
-            ), 
-            lastHeadPositionRef.current,
-            ...(isEatingApple(prevHeadCoords, appleCoords)
-                ? prevTailCoords
-                : prevTailCoords.slice(0, -1))
-        ])
+            )
+            return {
+                ...prev,
+                bodyCoords: [
+                    newHead,
+                    lastHeadPositionRef.current ?? prevHeadCoords,
+                    ...(isEatingApple(prevHeadCoords, prev.appleCoords)
+                        ? prevTailCoords
+                        : prevTailCoords.slice(0, -1))
+                ]
+            }
+        })
     }
 
     const eatApple = () => {
@@ -197,33 +234,23 @@ const Game = () => {
             boardSize,
             applesEaten
         )
-        setApplesEaten((prev) => {
-            if (
-                !(
-                    (prev + 1) %
-                    (settings.APPLES_TO_SPEED_UP_SNAKE.real as number)
-                )
-            )
-                speedUpSnake()
-            return prev + 1
+        setGameState((prev) => {
+            const newApplesEaten = prev.applesEaten + 1
+            const shouldSpeedUp =
+                !(newApplesEaten % (settings.APPLES_TO_SPEED_UP_SNAKE.real as number))
+            return {
+                ...prev,
+                applesEaten: newApplesEaten,
+                appleCoords: generateRandomAvailableCoords(
+                    [...prev.bodyCoords, ...prev.mineCoords, prev.appleCoords],
+                    boardSize
+                ),
+                moveRefresh: shouldSpeedUp
+                    ? prev.moveRefresh / (settings.SNAKE_SPEED_MULTIPLIER.real as number)
+                    : prev.moveRefresh
+            }
         })
-        placeNewApple()
         dispatch(increaseScore(pointsForApple))
-    }
-
-    const placeNewApple = () => {
-        setAppleCoords(
-            generateRandomAvailableCoords(
-                [...bodyCoords, ...mineCoords, appleCoords],
-                boardSize
-            )
-        )
-    }
-
-    const speedUpSnake = () => {
-        setMovesRefresh(
-            (prev) => prev / (settings.SNAKE_SPEED_MULTIPLIER.real as number)
-        )
     }
 
     return (
