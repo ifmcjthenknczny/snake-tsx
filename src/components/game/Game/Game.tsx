@@ -237,7 +237,7 @@ const Game = () => {
         setGameState((prev) => {
             const newApplesEaten = prev.applesEaten + 1
             const shouldSpeedUp =
-                !(newApplesEaten % (settings.APPLES_TO_SPEED_UP_SNAKE.real as number))
+                newApplesEaten % (settings.APPLES_TO_SPEED_UP_SNAKE.real as number) === 0
             return {
                 ...prev,
                 applesEaten: newApplesEaten,
